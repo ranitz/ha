@@ -1,0 +1,13 @@
+<div class="custom-overflow" style="text-align: right; padding-right:2px;padding-left:2px;">
+    <div class="modal-header">
+        <a href="" ng-click="close()"><i class="fa fa-times" aria-hidden="true" style="float:right"></i></a>
+        <h2>{{langObj.terms}}</h2>
+        
+    </div>
+    <p ng-show="langObj.lang === 'en'" style="font-size:16px" ng-bind-html="panel[0].f_terms"></p>
+    <p ng-show="langObj.lang === 'he'" style="font-size:16px" ng-bind-html="panel[1].f_terms"></p>
+    <!--<p ng-repeat="a in panel">{{a}}</p>-->
+    <div style="width:100%;text-align: center;margin-bottom:10px;">
+    <button class="btn btn-info" style="font-size: 18px; margin-bottom:10px;margin:auto;display: inline-block" ng-click="close()">{{langObj.close}}</button>
+    </div>
+</div>

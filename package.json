@@ -1,0 +1,51 @@
+{
+    "name": "has",
+    "version": "1.0.0",
+    "description": "donation app",
+    "keywords": [
+        "OpenShift",
+        "Node.js",
+        "application",
+        "openshift"
+    ],
+    "author": {
+        "name": "OpenShift",
+        "email": "ramr@example.org",
+        "url": "http://www.openshift.com/"
+    },
+    "homepage": "http://www.openshift.com/",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/openshift/origin-server"
+    },
+    "engines": {
+        "node": ">= 0.6.0",
+        "npm": ">= 1.0.0"
+    },
+    "dependencies": {
+        "express": "4.13.4",
+        "pg": "~1",
+        "async": "1.5.2",
+        "body-parser": "~1.4.2",
+        "cookie-parser": "~1.0.0",
+        "express-session": "~1.0.0",
+        "serve-static" :"1.10.2",
+        "jsonwebtoken" : "~5.7.0",
+        "express-jwt"     : "*",
+        "connect-pg-simple" : "3.1.0", 
+        "nodemailer" : "*",
+        "request" : "*",
+        "exceljs" : "0.2.8",
+        "multer" : "1.1.0",
+        "serve-favicon" : "2.3.0",
+		"nodejs-md5" : "0.6.0"
+    },
+    "devDependencies": {},
+    "bundleDependencies": [],
+    "private": true,
+    "main": "server.js",
+    "scripts": {
+        "start": "node server.js"
+    }
+
+}

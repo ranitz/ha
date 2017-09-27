@@ -1,0 +1,19 @@
+<div class="custom-container" style="margin-top: 1%; min-width:350px;">
+    <h2>{{langObj.contactus}}</h2><br>
+    <!--<div ng-class="langObj.lang === 'he' ? 'custom-form-group-he' : 'custom-form-group-en'">-->
+        <!--<label></label>-->
+        <input type='text' ng-model='contactus.subject' class="form-control mobile-full" placeholder="{{langObj.subject}}" required>
+    <!--</div>-->
+    <!--<div ng-class="langObj.lang === 'he' ? 'custom-form-group-he' : 'custom-form-group-en'">-->
+        <!--<label></label>-->
+        <input type='email' ng-model='contactus.email' class="form-control mobile-full" placeholder="{{langObj.email}}" required>
+    <!--</div>-->
+    <!--<div ng-class="langObj.lang === 'he' ? 'custom-form-group-he' : 'custom-form-group-en'">-->
+        <!--<label style="position: relative;bottom: 155px;"></label>-->
+        <textarea ng-model='contactus.content' class="form-control mobile-full" rows="8" placeholder="{{langObj.content}}" required></textarea>
+    <!--</div>-->
+    <br>
+    <button class="btn btn-success" ng-click="contact(contactus)" style="font-size:18px"><i ng-show="sendContactSpinner" class="fa fa-refresh fa-spin fa-fw"></i><i ng-hide="sendContactSpinner" class="fa fa-envelope-o" aria-hidden="true"></i>&nbsp;{{langObj.send}}</button>
+  
+    <p style="margin-top:10px">{{langObj.tocontel}}</p><p> <a href="tel:03-756-3999">03-756-3999</a><p>
+</div>

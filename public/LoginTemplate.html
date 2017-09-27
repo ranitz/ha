@@ -1,0 +1,47 @@
+
+<div class="modal-content" style="color:#424242">
+    <div class="modal-header">
+
+        <h4 class="modal-title">{{langObj.login}}</h4>
+    </div>
+    <div class="modal-body" ng-show="logging == 2"><h1>{{langObj.loginsuccess}}!</h1></div>
+    <div class="modal-footer" ng-show="logging == 2"><a href="#" ng-click="ok(user)" class="btn btn-primary">{{langObj.ok}}</a></div>
+    <div class="modal-body" ng-show="logging == 3"><h1>Login error!</h1></div>  
+    <div class="modal-footer" ng-show="logging == 3"><a href="#" ng-click="cancelLogin()" class="btn">{{langObj.close}}</a></div>  
+    <div class="modal-body" ng-show="logging == 4">
+        <h2>{{langObj.enteremailrestorepass}}:</h2>
+        <input type="email" class="form-control" ng-model="user.f_name"><br>
+        <a href="" class="btn btn-info" ng-click="resPass(user.f_name)">{{langObj.sendemail}}</a>
+    </div>  
+    <div class="modal-footer" ng-show="logging == 4"><a href="#" ng-click="cancelLogin()" class="btn">{{langObj.close}}</a></div>  
+
+    <div ng-show="logging == 1">
+        <div class="modal-body">
+            <h1>{{langObj.pleasewait}}...</h1>
+            <div class="col-sm-4" style="width:100%;"><uib-progressbar class="progress-striped active" type="processing"></uib-progressbar></div>
+        </div>
+    </div>
+    <div class="modal-body" ng-show="logging == 0">
+        <div class="form-group">
+            <label for="exampleInputEmail1">{{langObj.email}}:</label>
+            <input class="form-control" id="exampleInputEmail1" placeholder="{{langObj.email}}" type="email" ng-model="user.email" required="">
+        </div>
+        <div class="form-group">
+            <label for="exampleInputPassword1">{{langObj.password}}:</label>
+            <input class="form-control" id="exampleInputPassword1" placeholder="{{langObj.password}}" type="password" ng-model="user.pass" required="">
+        </div>
+        <div class="footer" style="width:100%">
+            <div class="form-group" style="width:auto; float:left;">
+                <input type="checkbox" id="RememberMe" ng-model="user.save" name="userAgree" required="" />
+                <label for="RememberMe">{{langObj.rememberme}}</label>
+            </div>
+            <div style="width:auto; float:right;"><a href="" ng-click="logging = 4">{{langObj.forgotpass}}?</a></div><br>
+        </div>              
+    </div>   
+    <div class="modal-footer" ng-show="logging == 1"></div>
+    <div class="modal-footer"  ng-show="logging == 0">
+        <a href="#" ng-click="cancelLogin()" class="btn">{{langObj.close}}</a>
+        <a href="#" ng-click="pressLogin(user)" class="btn btn-primary">{{langObj.login}}</a>
+    </div>
+</div>
+

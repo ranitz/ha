@@ -1,0 +1,7 @@
+<div class="custom-container" style="margin-top: 1%; max-width:650px;overflow-y: auto; text-align: right">
+<h2><i>{{langObj.terms}}</i></h2>
+<p ng-show="langObj.lang==='en'" style="font-size:16px" ng-bind-html="panel[0].f_terms"></p>
+<p ng-show="langObj.lang==='he'" style="font-size:16px" ng-bind-html="panel[1].f_terms"></p>
+<!--<p ng-repeat="a in panel">{{a}}</p>-->
+<a href="" ui-sref="home" style="margin:auto">{{langObj.backhome}}</a>
+</div>

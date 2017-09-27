@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+
+<head>
+    <script src="../js/angular.min.js"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel='stylesheet' type='text/css' >
+</head>
+<body>
+
+    <FORM Action="https://direct.tranzila.com/ttxyoniyaa/iframe.php" method=POST>
+
+        <input type="hidden" name="supplier" value="ttxyoniyaa">
+        <label for="select">Please choose a synagogue</label>
+        <select class="form-control" name="synagogue" ng-model="donation.synagogue" id="select" style="color:blue; direction:rtl; width:auto; margin:auto;">
+            <option ng-repeat="syn in synagogue_list.rows" value="{{syn.f_name}}">{{syn.f_name}}</option>
+        </select>
+        <div class="form-group">
+            <label for='sum'>Sum:</label>
+            <input type="text" class="form-control" id='sum' name='sum' ng-model="donation.sum"><br>
+        </div>
+        <div class="form-group">
+            <label for='ccno'>Credit Card Number:</label>
+            <input id='ccno' type="text" class="form-control" name='ccno' ng-model="donation.ccno"><br>
+        </div>
+        <div class="form-group">
+            <label>Expiration:</label>
+            <br>
+            <label for='expmonth'>Month:</label>
+            <select id='expmonth' name='expmonth' ng-model="donation.expmonth" style="color:black" class="form-control">
+                <option ng-repeat="month in months" >{{month}}</option>
+            </select>
+            <label class="control-label" for='expyear'>Year:</label>
+            <select id='expyear' name='expyear' ng-model="donation.expyear" class="form-control">
+                <option ng-repeat="year in years" >{{year}}</option>
+            </select>
+        </div>
+        <br>
+        <input class="btn btn-default" type="submit" id="submit" value="Submit" /><br>
+    </form>
+    <div style='background-color: white;color:black;' >{{data.data}}</div>
+
+
+
+</body>
+</html>

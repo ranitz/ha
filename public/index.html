@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html ng-app="ui">
+    <head>
+        <!--need to download and switch all CDNs with minified libs-->
+        <meta charset="UTF-8">
+        <meta name="Description" CONTENT="מחצית השקל - ככה תורמים היום!">
+        <title>מחצית השקל</title>
+        <meta name="viewport" content="width=device-width, initial-scale=0.8, maximum-scale=1" >
+        <meta name="google-site-verification" content="kJz9vfjgDIql07IZ0GAiTK_SilliDW2GNtkob5FCI6s" />
+		<!-- <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script> -->
+        <script src="js/angular.min.js"></script>
+        <script src="js/angular-sanitize.js"></script>
+        <script src="js/async.min.js"></script>
+        <script src="js/jquery.min.js"></script>
+
+        <!--<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-sanitize.js"></script>-->
+        <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/async/1.5.2/async.min.js"></script>-->
+        <!--<script src="https://code.jquery.com/jquery-2.2.3.min.js" integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo=" crossorigin="anonymous"></script>-->
+        <script src="js/angular-md5.js"></script>
+        <script src="js/angular-facebook.js"></script>
+        <script src="js/angular-ui-router.min.js"></script>
+        <script src="js/angular-animate.min.js"></script>
+        <script src="js/angular-touch.min.js"></script>
+        <!--        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.18/angular-ui-router.min.js"></script>-->
+        <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0/angular-animate.min.js"></script>-->
+        <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0/angular-touch.min.js"></script>-->
+        <!--<link href="css/bootstrap.min.css" rel='stylesheet' type='text/css' >-->
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel='stylesheet' type='text/css' >
+        <script src="js/ui-bootstrap.js"></script>
+        <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/1.2.4/ui-bootstrap-tpls.min.js"></script>-->
+        <!--        <script src="https://rawgithub.com/gsklee/ngStorage/master/ngStorage.js"></script>-->
+        <script src="js/ngStorage.js"></script>
+        <script src="js/fontAw.js"></script>
+        <!--<script src="https://use.fontawesome.com/5a47892aa4.js"></script>-->
+        <script src="app.js"></script>
+        <script src="js/language.js"></script>
+        <script src="js/sticky.min.js"></script>
+        <script src="js/toastr.tpls.js"></script>
+        <!--<script src="https://npmcdn.com/angular-toastr/dist/angular-toastr.tpls.js"></script>-->
+        <link rel="stylesheet" href="https://npmcdn.com/angular-toastr/dist/angular-toastr.css" />
+        <!--<link rel="stylesheet" href="css/angular-toastr.css" />-->
+        <link href="css/style.css" rel='stylesheet' type='text/css'>
+        <link href="css/spinner.css" rel='stylesheet' type='text/css'>
+        <script src="js/bootstrap.min.js"></script>
+		<!-- <script id=rc-imageselect src="{'https://www.google.com/recaptcha/api.js?onload=vcRecaptchaApiLoaded&render=explicit&hl=iw':{langObj.lang} === 'he','https://www.google.com/recaptcha/api.js?onload=vcRecaptchaApiLoaded&render=explicit&hl=en':{langObj.lang} === 'en'}" async defer></script>-->
+        <script id=rc-imageselect src="https://www.google.com/recaptcha/api.js?onload=vcRecaptchaApiLoaded&render=explicit&hl=iw" async defer></script>
+        <script type="text/javascript" src="js/angular-recaptcha.js"></script>
+        <!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" async></script>-->
+    </head>
+
+    <body ng-controller="uiController" ng-class="{'bodyHe':langObj.lang === 'he','bodyEn':langObj.lang === 'en'}" >
+        <div ng-show="!viewReceipt || viewReceipt === false">
+            <!--            <div class="custom-logo">
+                            <img src="images/icon2.png" style="width: 220px;" >
+                        </div>-->
+            <nav  class="navbar navbar-default custom-nav">
+                <!--<nav sticky sticky-class="nav-sticky-fix" class="navbar navbar-default custom-nav">-->
+                <div class="container-fluid" style="padding-left: 0px;">
+                    <div class="navbar-header" ng-class="{'navpicHe':langObj.lang === 'he','navpicEn':langObj.lang === 'en'}">
+
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbody" aria-expanded="false" style="margin-top:17px;">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+						<div>
+							<a href="http://www.mh2.co.il" style="display:inline-block;">
+								<img class="mobileShow" src="images/tl1.png" ng-class="{'navpicHeNew':langObj.lang === 'he','navpicEnNew':langObj.lang === 'en'}">
+							</a>
+						</div>
+                        <!--<img src="images/newlogohalf.png" style="width: 100px;" ng-class="{'navpicHe':langObj.lang === 'he','navpicEn':langObj.lang === 'en'}" >-->
+                        <!--<a class="navbar-brand" href="#">{{langObj.navtitle}}</a>-->
+                        <!--<img src="images/ccc.png" style="width: 125px; margin-top:-15px;margin-left:15px;" >-->
+                    </div>
+
+                    <div class="navbar-collapse collapse" id="navbody" aria-expanded="false">
+
+                        <ul class="nav navbar-nav" ng-class="{'navbar-left':langObj.lang === 'en','navbar-right right-to-left':langObj.lang === 'he'}" style="padding-left: 0px;padding-right: 0px;">
+                            <!--ng-show='isActive(tab.view)'-->
+                            <li class="tab" ng-repeat="tab in tabs" ui-sref-active="custom-navbar-tab-active" ui-sref="{{tab.view}}" ui-sref-opts="{reload: true}" ng-show="user.f_status >= tab.show" ng-if="!tab.subTabs" id="coll_in_mobile1" data-target="#navbody">
+                                <i class="fa {{tab.icon}}" aria-hidden="true" style="color: #C7C7C7;"></i>
+                                <a href="" style='display:inline-block;' ng-bind="tab.title"></a>
+                            </li>
+                            <li class="dropdown tab" ng-repeat="tab in tabs" ng-if="tab.subTabs" ui-sref-active="custom-navbar-tab-active" ng-show="showNav(tab)">
+                                <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" ng-class="langObj.lang === 'he' ? 'navTabHeDD' : 'navTabenDD'">
+                                    <i class="fa {{tab.icon}}" ng-class="langObj.lang === 'he' ? 'navpicHe' : 'navpicEn'" aria-hidden="true" style="color: #C7C7C7;display:inline-block;"></i> 
+                                    &nbsp{{tab.title}}
+                                </a>
+                                <ul class="dropdown-menu custom-dropdown-menu" role="menu" id="coll_in_mobile2" data-target="#navbody">
+                                    <li ng-repeat="sub in tab.subTabs" ui-sref="{{tab.view}}({view:sub.name})" ui-sref-opts="{reload: true}" ><a style="color:#C4C4C4" href="" ng-bind="sub.title"></a></li>
+                                </ul>
+                            </li>
+                        </ul>
+						
+                        <ul class="nav navbar-nav" ng-class="{'navbar-left right-to-left':langObj.lang === 'he','navbar-right':langObj.lang === 'en'}" style="padding-left: 0px;padding-right: 0px;">
+                            <li class = "cntrl-buttons tab" >
+                                <a href='' ng-click='changeLang()'>
+                                    <img ng-src="images/IL.png" ng-class="langObj.lang === 'he' ? 'active-lang' : 'lang'">    
+                                    <img ng-src="images/US.png" ng-class="langObj.lang === 'en' ? 'active-lang' : 'lang'">    
+                                </a>
+                            </li>
+                            <li class="tab" ui-sref-active="custom-navbar-tab-active" ng-hide="user.f_name"><a ui-sref="register" ui-sref-opts="{reload: true}"><i class="fa fa-user-plus" aria-hidden="true" ng-bind="langObj.register" id="coll_in_mobile3" data-target="#navbody"></i> </a></li>
+                            <li class="tab" ui-sref-active="custom-navbar-tab-active" ng-hide="user.f_name" ui-sref="login" ui-sref-opts="{reload: true}"><a href="#"><i class="fa fa-sign-in" aria-hidden="true" ng-bind="langObj.login" id="coll_in_mobile4" data-target="#navbody"></i> </a></li>
+                            <script>
+								var width = $(window).width(); // the current width of the window
+								if(width < 768 /*pixels*/){
+									$("#coll_in_mobile1").attr("data-toggle", "collapse"); // Not a phone nor a tablet
+									$("#coll_in_mobile2").attr("data-toggle", "collapse");
+									$("#coll_in_mobile3").attr("data-toggle", "collapse");
+									$("#coll_in_mobile4").attr("data-toggle", "collapse");
+								} 
+							</script>
+							<li class = "liuc cntrl-buttons tab" ng-show="user.f_name"><a ng-bind-template="{{langObj.hello}}, {{user.f_full_name || user.f_name}}"></a></li>
+                            <!--<li class = "liuc cntrl-buttons tab" ng-show="user.f_name"><a>{{langObj.hello}}, {{user.f_full_name|| user.f_name}}</a></li>-->
+                            <li class = "cntrl-buttons tab" ng-show="user.f_name" ng-click="logout()"><a href="#"><span class="glyphicon glyphicon-log-out" ng-bind="langObj.logout"></span> </a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            <div class="win mainWin">
+                <div class="content">
+					<a href="http://www.mh2.co.il">
+						<img src="images/bbb.png" class="mobileHide" style="width: 170px; position: absolute;right: 15px;">
+					</a>
+                    <ui-view />
+                </div>
+            </div>
+            <!--        <div class="win sideWin">
+                        <h2>{{langObj.news}}</h2>
+                        <div class="scroll-up">
+                            <div class="insidescroll">
+                                <div ng-repeat="syn in synagogue_list.rows" ng-if="syn.f_messages.length && syn.f_messages.length > 0">
+                                    <h4 style="text-decoration: underline;">{{syn.f_name}}</h4>
+                                    <p ng-repeat="m in syn.f_messages">{{m}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>-->
+
+
+
+            <!--<button ng-click='printUser()'>printUser</button>-->
+        </div>
+        <div  ng-show="viewReceipt === true">
+            <ui-view />
+        </div>
+    </body>
+
+    <footer class="custom-footer" ng-class="{'bodyHe':langObj.lang === 'he','bodyEn':langObj.lang === 'en'}" ng-show="!viewReceipt || viewReceipt === false">
+
+        <ul style="font-size: 17px;margin-bottom: 0px;width:auto;margin:auto;display:inline-block;padding-right:0px">
+            <li style="display: inline-block">
+                <a href="" ui-sref="about" ng-click="bBarClick('about')" ng-bind="langObj.about"> </a>
+            </li>
+            <li style="display: inline-block">
+                <a href="" ui-sref="contact" ng-click="bBarClick('contact')" ng-bind="langObj.contactus"></a>
+            </li>
+
+            <li style="display: inline-block">
+                <a href="" ui-sref="terms" ng-click="bBarClick('terms')" ng-bind="langObj.terms"></a>
+            </li>
+            <li style="display: inline-block">
+                <a href="" ui-sref="policy" ng-click="bBarClick('policy')" ng-bind="langObj.privpolic"></a>
+            </li>
+
+        </ul>
+        <br>
+        <ul style="margin:0px; font-size: 18px; width:auto;margin:auto;display:inline-block;padding-right:0px">
+            <li>
+               <!-- <a href="mailto:ory.tabak@gmail.com">{{langObj.powered}}</a> -->
+			  <text> {{langObj.powered}} </text>
+            </li> 
+        </ul>
+    </footer>
+
+</html>

@@ -1,0 +1,43 @@
+
+<div class="custom-container mobile-no-min-width" style="margin-top:1%;min-width:470px;max-width:550px">
+    <h2 ng-bind="langObj.logintitle"></h2>
+    <div class="body" ng-show="logging == 2"><h1>{{langObj.loginsuccess}}!</h1></div>
+    <button ng-click="loginFB()" class="btn btn-default" style="background-color: #3d57a3; border-color: #3d57a3; color:white;margin-bottom: 20px; margin-top: 10px; font-weight:bold"><i class="fa fa-facebook-official" aria-hidden="true"></i>&nbsp;{{langObj.loginwithfb}}</button>
+    <div ng-show="logging == 2"><a href="#" ng-click="ok(userlogin)" class="btn btn-primary" style="margin:auto">{{langObj.ok}}</a></div>
+    <div class="body" ng-show="logging == 3"><h1>{{langObj.login_error}}</h1></div>  
+    <div ng-show="logging == 3"><a href="#" ng-click="cancelLogin()" class="btn">{{langObj.close}}</a></div>  
+    <div class="body" ng-show="logging == 4">
+        <h2>{{langObj.enteremailrestorepass}}</h2>
+        <input type="email" class="form-control" ng-model="userlogin.f_name"><br>
+        <a href="" class="btn btn-info" ng-click="resPass(userlogin.f_name)">{{langObj.sendemail}}</a>
+    </div>  
+
+    <div ng-show="logging == 1">
+        <div class="body">
+            <h1>{{langObj.pleasewait}}...</h1>
+            <div class="col-sm-4" style="width:100%;"><uib-progressbar class="progress-striped active" type="processing"></uib-progressbar></div>
+        </div>
+    </div>
+    <div class="body" ng-show="logging == 0">
+        <div class="form-group" ng-class="langObj.lang === 'he' ? 'custom-form-group-he' : 'custom-form-group-en'">
+            <label for="exampleInputEmail1" class="mobileHide">{{langObj.email}}</label>
+            <input class="form-control custom-input mobile-full" name="username" placeholder="{{langObj.email}}" type="email" ng-model="userlogin.email" required="">
+        </div>
+        <div class="form-group" ng-class="langObj.lang === 'he' ? 'custom-form-group-he' : 'custom-form-group-en'">
+            <label class="mobileHide" for="exampleInputPassword1">{{langObj.password}}</label>
+            <input class="form-control custom-input mobile-full" name="password" placeholder="{{langObj.password}}" type="password" ng-model="userlogin.pass" required="">
+        </div>
+        <div style="width:100%">
+            <div class="form-group" style="width:auto; float:left; margin-left:27px;">
+                <input type="checkbox" id="RememberMe" ng-model="userlogin.save" name="userAgree" required="" />
+                <label for="RememberMe" style="vertical-align: top">{{langObj.rememberme}}</label>
+            </div>
+            <div class="mobile-margin5" style="width:auto; float:right;margin-right: 5px;"><a href="" ng-click="logging = 4">{{langObj.forgotpass}}?</a></div><br>
+        </div>              
+    </div>   
+   <br>
+    <div ng-show="logging == 0">
+        <button ng-click="pressLogin(userlogin)" class="btn btn-success" style="display: inline-block;margin-bottom:10px; font-size: 16px"><i class="fa fa-sign-in" aria-hidden="true"></i>&nbsp;{{langObj.login}}</button>
+    </div>
+</div>
+

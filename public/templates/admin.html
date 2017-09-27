@@ -1,0 +1,463 @@
+<!--<div class="synnav">
+    <div class="list-group sidenav">
+        <button class="list-group-item" ng-class="{active:users.view === 'users'}" ng-click="users.view = 'users'">{{langObj.users}}</button>
+        <button class="list-group-item" ng-class="{active:users.view === 'donations'}" ng-click="users.view = 'donations'">{{langObj.donations}}</button>
+        <button class="list-group-item" ng-class="{active:users.view === 'synagogues'}" ng-click="users.view = 'synagogues'">{{langObj.synagogues}}</button>
+        <button class="list-group-item" ng-class="{active:users.view === 'mailUsers'}" ng-click="users.view = 'mailUsers'">{{langObj.mailinglist}}</button>
+        <button class="list-group-item" ng-class="{active:users.view === 'addSyn'}" ng-click="users.view = 'addSyn'">{{langObj.addsyn}}</button>
+    </div>
+</div>-->
+<div class="custom-container custom-overflow" style="margin-top: 2%" ng-if="users.view !== 'spinner'">
+    <div ng-show="users.view === 'users'">
+        <h2>{{langObj.users}}</h2>
+        <br><div>
+            <i class="fa fa-lg fa-search" aria-hidden="true" style='display:inline-block;'></i>&nbsp;&nbsp;<input class="form-control" ng-model="adminSearchUser" placeholder="{{langObj.search}}" style='width:90%;display: inline-block'>
+        </div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>{{langObj.fullname}}</th>
+                    <th>{{langObj.email}}</th>
+                    <th>{{langObj.status}}</th>
+                    <th>{{langObj.synagogue}}</th>
+                    <th colspan='2'>{{langObj.actions}}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="u in filtered = (users.rows| filter:adminSearchUser) | startFrom:adminUcounter | limitTo:10">
+                    <td>{{u.f_id}}</td>
+                    <td>{{u.f_full_name}}</td>
+                    <td>{{u.f_name}}</td>
+                    <td>{{statuses[u.f_status]}}</td>
+                    <!--                        <select ng-model="u.f_status" style="color:black">
+                                                <option>1</option>
+                                                <option>2</option>
+                                                <option>3</option>
+                                            </select>
+                                        </td>-->
+                    <td>{{getSynById(u.f_synagogue).f_name}}</td>
+                    <td>
+                        <button ng-show="u.f_status > 2" class="btn btn-warning" ng-click="u.demoteVerify = true"><i class="fa fa-ban" aria-hidden="true"></i> {{langObj.demote}}</button>
+                        <button ng-hide="u.f_status > 2" class="btn btn-info" ng-click="u.promoteVerify = true"><i class="fa fa-star-o" aria-hidden="true"></i> {{langObj.promote}}</button>
+                    </td>
+                    <td><button class="btn btn-danger" ng-click="u.verifyUserDel = true"><i class="fa fa-trash-o" aria-hidden="true"></i> {{langObj.delete}}</button></td>
+
+                    <td ng-show="u.demoteVerify === true" style="min-width: 125px">{{langObj.verifydelete}}<br>
+                        <button class="btn btn-success" ng-click="demote(u)">{{langObj.ok}}</button>
+                        <button class="btn btn-warning" ng-click="u.demoteVerify = false">{{langObj.cancel}}</button>
+                    </td>
+                    <td ng-show="u.promoteVerify === true" style="min-width: 125px">{{langObj.verifydelete}}<br>
+                        <button class="btn btn-success" ng-click="promote(u)">{{langObj.ok}}</button>
+                        <button class="btn btn-warning" ng-click="u.promoteVerify = false">{{langObj.cancel}}</button>
+                    </td>
+                    <td ng-show="u.verifyUserDel === true" style="min-width: 125px">{{langObj.verifydelete}}<br>
+                        <button class="btn btn-success" ng-click="deleteUser(u)">{{langObj.ok}}</button>
+                        <button class="btn btn-warning" ng-click="u.verifyUserDel = false">{{langObj.cancel}}</button>
+                    </td>
+                    <!--<td><button class="btn btn-default" ng-click="updateStatus($index)">update</button></td>-->
+                </tr>
+            </tbody>
+        </table>
+        <div>
+            <a href="" ng-hide="adminUcounter === 0" ng-click="adminUcounter = adminUcounter - 10">{{langObj.prev}}</a>
+            {{adminUcounter + 1}}-<span ng-hide="adminUcounter + 10 > filtered.length">{{adminUcounter + 10}}</span><span ng-show="adminUcounter + 10 > filtered.length">{{filtered.length}}</span>/{{filtered.length}}
+            <a href="" ng-click="adminUcounter = adminUcounter + 10" ng-hide="adminUcounter + 10 >= filtered.length">{{langObj.next}}</a>
+        </div>
+    </div>
+    <div ng-show="users.view === 'donations'" style="width:auto">
+        <h2>{{langObj.donations}}</h2>
+        <div ng-hide="filterAdmin"><a href="" ng-click="filterAdmin = true">{{langObj.datefilter}}</a> | <a href="" ng-click="getAllDonations()">{{langObj.showall}}</a></div>
+        <div id="filters" ng-show="filterAdmin" style="direction:ltr">
+            <div class="row" style="width:370px;margin:auto;">
+                <div class="col-md-6"  style="margin:auto" ng-class="langObj.lang === 'he' ? 'navpicHe' : 'navpicEn'">
+                    {{langObj.fromdate}}
+                    <p class="input-group">
+                        <input type="text" class="form-control" uib-datepicker-popup="dd/MM/yyyy" ng-model="adStartDate" is-open="adpopup1.opened" ng-required="true" close-text="Close" />
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-default" ng-click="adpopup1.opened = true"><i class="glyphicon glyphicon-calendar"></i></button>
+                        </span>
+                    </p>
+                </div>
+
+                <div class="col-md-6" style="margin:auto">
+                    {{langObj.todate}}
+                    <p class="input-group">
+                        <input type="text" class="form-control" uib-datepicker-popup="dd/MM/yyyy" ng-model="adEndDate" is-open="adpopup2.opened" ng-required="true" close-text="Close" />
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-default" ng-click="adpopup2.opened = true"><i class="glyphicon glyphicon-calendar"></i></button>
+                        </span>
+                    </p>
+                </div>
+            </div>
+            <br>
+            <button class="btn btn-default" ng-click="dateFilter(adStartDate, adEndDate)" style="color:black">{{langObj.showdates}}</button>
+            <div style="margin-top:15px"><a href="" ng-click="filterAdmin = false">{{langObj.back}}</a></div>
+        </div>
+        <br>
+        <div>
+            <i class="fa fa-lg fa-search" aria-hidden="true" style='display:inline-block;' ng-hide="filterAdmin"></i>&nbsp;&nbsp;<input class="form-control" ng-model="adminSearchText" placeholder="{{langObj.search}}" ng-hide="filterAdmin" style='display: inline-block;width: 90%'>
+        </div>
+        <br>
+        <table class="table" ng-hide="filterAdmin">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>{{langObj.email}}</th>
+                    <th>{{langObj.sum}}</th>
+                    <th>{{langObj.synagogue}}</th>
+                    <th>{{langObj.tempref}}</th>
+                    <th>{{langObj.date}}</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="u in filtered = (users.donations.rows| filter:adminSearchText) | startFrom:adminDcounter | limitTo:10 ">
+                    <td>{{u.f_id}}</td>
+                    <td>{{u.f_name}}</td>
+                    <td>{{u.f_sum}}</td>
+                    <td>{{u.f_synagogue}}</td>
+                    <td>{{u.f_tempref}}</td>
+                    <td>{{parseDate(u.f_date)}}</td>
+
+
+                </tr>
+            </tbody>
+        </table>
+        <div ng-hide="filterAdmin">
+            <a href="" ng-hide="adminDcounter === 0" ng-click="adminDcounter = adminDcounter - 10">{{langObj.prev}}</a>
+            {{adminDcounter + 1}}-<span ng-hide="adminDcounter + 10 > filtered.length">{{adminDcounter + 10}}</span><span ng-show="adminDcounter + 10 > filtered.length">{{filtered.length}}</span>/{{filtered.length}}
+            <a href="" ng-click="adminDcounter = adminDcounter + 10" ng-hide="adminDcounter + 10 >= filtered.length">{{langObj.next}}</a>
+        </div><br>
+        <div ng-hide="filterAdmin">
+            <button class='btn btn-info' ng-hide="excelwait === true"  ng-click="getExcel(filtered)" ><i class="fa fa-file-excel-o" aria-hidden="true"></i> {{langObj.exceltoemail}}</button>
+            <button class='btn btn-info' ng-show="excelwait === true"><i class="fa fa-refresh fa-spin fa-fw"></i> {{langObj.pleasewait}}</button>
+        </div>
+    </div>
+    <div ng-show="users.view === 'synagogues'">
+        <h2>
+            {{langObj.synagogues}}
+        </h2>
+        <table class="table" >
+            <thead>
+                <tr>
+                    <th>{{langObj.name}}</th>
+                    <th>{{langObj.manager}}</th>
+                    <th colspan="2">{{langObj.actions}}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="s in synagogue_list.rows">
+                    <td>{{s.f_name}}</td>
+                    <td>{{getUserById(users.rows, s.f_manager_list[0]).f_name}}</td>
+                    <td><button class="btn btn-warning" ng-click="editSynagogue($index)"><i class="fa fa-pencil" aria-hidden="true"></i>&nbsp;{{langObj.edit}}</button></td>
+                    <td>   <button class="btn btn-danger" ng-click="s.verifySynDel = true"><i class="fa fa-trash" aria-hidden="true"></i>&nbsp;{{langObj.delete}}</button></td>
+                    <td ng-show="s.verifySynDel === true">{{langObj.verifydelete}}<br>
+                        <button class="btn btn-success" ng-click="deleteSynagogue(s)">{{langObj.ok}}</button>
+                        <button class="btn btn-warning" ng-click="s.verifySynDel = false">{{langObj.cancel}}</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div ng-show="users.view === 'editSyn'">
+        <h2>{{editSyn.f_name}}</h2>
+        <div id="managersAdmin" class="custom-well">
+            <h3>{{langObj.managers}}</h3>
+            <div ng-class="langObj.lang === 'he' ? 'custom-form-group-he' : 'custom-form-group-en'">
+                <label>{{langObj.mainmanager}}</label>
+                <div class="custom-input mobile-full">
+                    <input type="text" ng-model="editSyn.manager" uib-typeahead="u.f_name for u in users.rows | filter:$viewValue | limitTo:8" class="form-control" style="width:80%; display:inline-block">
+                    <button class="btn btn-success" ng-click="updateManager(editSyn.manager, editSyn.f_id, true)" style="display: inline-block"><i class="fa fa-pencil" aria-hidden="true"></i>&nbsp;{{langObj.edit}}</button>
+                </div>
+            </div>
+            <br>
+            <br>
+            <div>
+                <div ng-class="langObj.lang === 'he' ? 'custom-form-group-he' : 'custom-form-group-en'">
+                    <label>{{langObj.managers}}</label>
+                    <div class="custom-input mobile-full">
+                        <input type="text" ng-model="editSyn.newManager" uib-typeahead="u.f_name for u in users.rows | filter:$viewValue | limitTo:8" class="form-control" style="width:80%;display:inline-block">
+                        <button class="btn btn-info" ng-click="updateManager(editSyn.newManager, editSyn.f_id, false)" style="display:inline-block"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp;{{langObj.add}}</button>
+                    </div>
+                </div><br>
+
+                <table class="table" style="margin:auto;width:90%" ng-show="editSyn.f_manager_list.length > 1">
+                    <thead>
+                        <tr>
+                            <th>{{langObj.name}}</th>
+                            <th>{{langObj.email}}</th>
+                            <th>{{langObj.actions}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="id in editSyn.f_manager_list" ng-show="$index !== 0">
+                            <td>{{getUserById(users.rows, id).f_full_name}}</td>
+                            <td>{{getUserById(users.rows, id).f_name}}</td>
+                            <td><button class="btn btn-danger" ng-click="removeManager(editSyn.f_id, id)"><i class="fa fa-trash" aria-hidden="true"></i>&nbsp;{{langObj.remove}}</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <br>
+        <div ng-class="langObj.lang === 'he' ? 'custom-form-group-he' : 'custom-form-group-en'">
+            <label class="mobile-hide">{{langObj.address}}</label>    
+            <input type="text" ng-model="editSyn.f_address" placeholder="{{langObj.address}}" uib-typeahead="address for address in getLocation($viewValue)" typeahead-loading="loadingLocations" typeahead-no-results="noResults" class="form-control custom-input mobile-full">
+        </div>
+        <div ng-class="langObj.lang === 'he' ? 'custom-form-group-he' : 'custom-form-group-en'">
+            <label class="mobile-hide">{{langObj.about}}</label>
+            <textarea ng-model='editSyn.f_content' rows="5" class="form-control custom-input mobile-full" placeholder="{{langObj.about}}"></textarea>
+        </div>
+        <div ng-class="langObj.lang === 'he' ? 'custom-form-group-he' : 'custom-form-group-en'">
+            <label class="mobile-hide">{{langObj.imagelink}}</label>
+            <input type='text' ng-model='editSyn.f_imgurl' class="form-control custom-input mobile-full" placeholder="{{langObj.imagelink}}">
+        </div>
+        <br><br>
+        <div class='custom-image-well' ng-hide="!editSyn.f_imgurl || editSyn.f_imgurl === ''">
+            <img class='synimg'  ng-src='/b/getImage/{{editSyn.f_id}}'><br><br>
+        </div>
+        <div ng-class="langObj.lang === 'he' ? 'custom-form-group-he' : 'custom-form-group-en'">
+            <label class="mobile-hide">{{langObj.bankaccount}}</label>
+            <div class="custom-input mobile-full">
+                <input type="text" class="form-control" ng-model="editSyn.f_bank_account[0]" style="display: inline;width:30%" placeholder="{{langObj.bankaccount}}">-
+                <input type="text" class="form-control" ng-model="editSyn.f_bank_account[1]" style="display: inline;width:30%" placeholder="{{langObj.branch}}">-
+                <input type="text" class="form-control" ng-model="editSyn.f_bank_account[2]" style="display: inline;width:30%" placeholder="{{langObj.bank}}">
+            </div>
+        </div>
+        <div ng-class="langObj.lang === 'he' ? 'custom-form-group-he' : 'custom-form-group-en'">
+            <label class="mobile-hide">{{langObj.associationname}}</label>
+            <input type='text' ng-model='editSyn.f_association_name' class="form-control custom-input mobile-full" placeholder="{{langObj.associationname}}">
+        </div>
+        <div ng-class="langObj.lang === 'he' ? 'custom-form-group-he' : 'custom-form-group-en'">
+            <label class="mobile-hide">{{langObj.associationnumber}}</label>
+            <input type='text' ng-model='editSyn.f_association_id' class="form-control custom-input mobile-full" placeholder="{{langObj.associationnumber}}">
+        </div>
+        <div ng-class="langObj.lang === 'he' ? 'custom-form-group-he' : 'custom-form-group-en'">
+            <label class="mobile-hide">{{langObj.email}}</label>
+            <input type='email' ng-model='editSyn.f_contact_mail' class="form-control custom-input mobile-full" placeholder="{{langObj.contactemail}}">
+        </div>
+
+        <br>
+        <div style="width:100%">
+            <button class='btn btn-success' ng-click='updateSyn(editSyn)' style="font-size: 18px"><i class="fa fa-floppy-o" aria-hidden="true"></i>&nbsp;{{langObj.save}}</button>
+        </div>    
+            <a href="" ng-click="users.view = 'synagogues'" style="margin-top:5px">{{langObj.back}}</a>
+        
+    </div>
+    <div ng-show="users.view === 'panel'" style="min-width: 450px;">
+
+        <h2>{{langObj.managesite}}</h2>
+        <div ng-show="langObj.lang === 'he'">
+            <h3>תוכן עברי</h3>
+            <div>
+                <label>אודות</label>
+                <textarea class="form-control" ng-model="panel[1].f_about" rows="8"></textarea>
+            </div>
+            <div>
+                <label>תקנון ותנאי שימוש</label>
+                <textarea class="form-control" ng-model="panel[1].f_terms" rows="8"></textarea>
+            </div><br>
+            <button class="btn btn-success" ng-click="editContent(panel[1])" style="font-size:16px"><i class="fa fa-floppy-o" aria-hidden="true"></i>&nbsp;שמור</button>
+        </div>
+        <div ng-show="langObj.lang === 'en'">
+            <h3>English content</h3>
+            <div>
+                <label>About</label>
+                <textarea class="form-control custom-input mobile-full" ng-model="panel[0].f_about" rows="8"></textarea>
+            </div>
+            <div>
+                <label>Terms of use</label>
+                <textarea class="form-control custom-input mobile-full" ng-model="panel[0].f_terms" rows="8"></textarea>
+            </div><br>
+            <button class="btn btn-success" ng-click="editContent(panel[0])" style="font-size:16px"><i class="fa fa-floppy-o" aria-hidden="true"></i>&nbsp;Save</button>
+        </div>
+    </div>
+    <div ng-show="users.view === 'mailUsers'">
+        <h2>{{langObj.mailinglist}}</h2><br>
+        <form style="width:350px; margin:auto">
+            <select class="form-control" ng-model="mail.group">
+                <option value="1">{{langObj.mailall}}</option>
+                <option value="2">{{langObj.mailmanagers}}</option>
+            </select>
+            <input type="text" class="form-control" placeholder="{{langObj.subject}}" ng-model="mail.subject">
+            <textarea class="form-control" ng-model="mail.content" rows="8"></textarea><br>
+            <button class="btn btn-success" ng-click="mailList()" style="font-size:18px"><i class="fa fa-envelope-o" aria-hidden="true"></i>&nbsp;{{langObj.send}}</button>
+        </form>
+    </div>
+    <div ng-show="users.view === 'addSyn'" class="mobile-add-syn" style="width:570px;margin:auto">
+        <h2>{{langObj.addsyn}}</h2>
+		<h3>{{langObj.synagogue_details}}</h3>
+        <div ng-class="langObj.lang === 'he' ? 'custom-form-group-he' : 'custom-form-group-en'">
+            <label class="mobile-hide">{{langObj.name}}</label>
+            <input type="text" class="form-control custom-input mobile-full" ng-model="newSyn.name" placeholder="{{langObj.name}}">
+        </div>
+        <div ng-class="langObj.lang === 'he' ? 'custom-form-group-he' : 'custom-form-group-en'">
+            <label class="mobile-hide">{{langObj.associationname}}</label>
+            <input type="text" class="form-control custom-input mobile-full" ng-model="newSyn.associationName" placeholder="{{langObj.associationname}}">
+        </div>
+        <div ng-class="langObj.lang === 'he' ? 'custom-form-group-he' : 'custom-form-group-en'">
+            <label class="mobile-hide">{{langObj.associationnumber}}</label>
+            <input type="text" class="form-control custom-input mobile-full" ng-model="newSyn.association" placeholder="{{langObj.associationnumber}}">
+        </div>
+        <!--  <div ng-class="langObj.lang === 'he' ? 'custom-form-group-he' : 'custom-form-group-en'">
+            <label class="mobile-hide">{{langObj.email}}</label>
+            <input type="text" ng-model="newSyn.contactEmail" class="form-control custom-input mobile-full" placeholder="{{langObj.contactemail}}">
+        </div> -->
+		
+		<h3>{{langObj.manager_details}}</h3>
+		
+		<form name="newSynForm" action="/" >
+			<!-- <div ng-class="langObj.lang === 'he' ? 'custom-form-group-he' : 'custom-form-group-en'">
+				<label class="mobile-hide">{{langObj.email}}</label>
+				<input type="email" name="myAddress" ng-model="newSyn.contactEmail" placeholder="{{langObj.contactemail}}" class="form-control custom-input mobile-full">
+				<span ng-show="newSynForm.myAddress.$error.email">Not a valid e-mail address</span>
+			</div> -->
+			<!-- <div ng-class="langObj.lang === 'he' ? 'custom-form-group-he' : 'custom-form-group-en'">
+				<label class="mobile-hide">{{langObj.gabay_first_name}}</label>
+				<input type="text" class="form-control custom-input mobile-full" ng-model="newSyn.name" placeholder="{{langObj.gabay_first_name}}">
+			</div> -->
+			<div ng-class="langObj.lang === 'he' ? 'custom-form-group-he' : 'custom-form-group-en'">
+				<label class="mobile-hide">{{langObj.email}}</label>
+				<input type="text" ng-model="newSyn.manager" uib-typeahead="u.f_name for u in users.rows | filter:$viewValue | limitTo:8" class="form-control custom-input mobile-full" placeholder="{{langObj.email}}">
+			</div>
+			<div ng-class="langObj.lang === 'he' ? 'custom-form-group-he' : 'custom-form-group-en'">
+				<label class="mobile-hide">{{langObj.first_name}}</label>
+				<input type="text" class="form-control custom-input mobile-full" ng-model="newSeller.first_name" placeholder="{{langObj.first_name}}">
+			</div>
+			<div ng-class="langObj.lang === 'he' ? 'custom-form-group-he' : 'custom-form-group-en'">
+				<label class="mobile-hide">{{langObj.last_name}}</label>
+				<input type="text" class="form-control custom-input mobile-full" ng-model="newSeller.last_name" placeholder="{{langObj.last_name}}">
+			</div>
+			<!-- <div ng-class="langObj.lang === 'he' ? 'custom-form-group-he' : 'custom-form-group-en'">
+				<label class="mobile-hide">{{langObj.email}}</label>
+				<input type="text" class="form-control custom-input mobile-full" ng-model="newSeller.email" placeholder="{{langObj.contact_email}}">
+			</div> -->
+			<div ng-class="langObj.lang === 'he' ? 'custom-form-group-he' : 'custom-form-group-en'">
+				<label class="mobile-hide">{{langObj.social_id}}</label>
+				<input type="text" class="form-control custom-input mobile-full" ng-model="newSeller.social_id" placeholder="{{langObj.social_id}}">
+			</div>
+			<div ng-class="langObj.lang === 'he' ? 'custom-form-group-he' : 'custom-form-group-en'">
+				<label class="mobile-hide">{{langObj.social_id_issued}}</label>
+				<input type="date" class="form-control custom-input mobile-full" ng-model="newSeller.social_id_issued" placeholder="{{langObj.social_id_issued}}">
+			</div>
+			<div ng-class="langObj.lang === 'he' ? 'custom-form-group-he' : 'custom-form-group-en'">
+				<label class="mobile-hide">{{langObj.birthdate}}</label>
+				<input type="date" class="form-control custom-input mobile-full" ng-model="newSeller.birthdate" placeholder="{{langObj.birthdate}}">
+			</div>
+			<!-- <div ng-class="langObj.lang === 'he' ? 'custom-form-group-he' : 'custom-form-group-en'">
+				<label class="mobile-hide">{{langObj.gender}}</label>
+				<!-<input type="text" class="form-control custom-input mobile-full" ng-model="newSyn.name" placeholder="{{langObj.gender}}"> -->
+				<!--<select class="form-control custom-input mobile-full" ng-model="newSeller.gender">
+						<option ng-repeat="gender in ['male', 'female']" value="{{gender}}">{{gender}}</option>
+				</select>
+			</div> -->
+			<!-- <div ng-class="langObj.lang === 'he' ? 'custom-form-group-he' : 'custom-form-group-en'">
+				<label class="mobile-hide">{{langObj.email}}</label>
+				<input type="text" class="form-control custom-input mobile-full" ng-model="newSyn.name" placeholder="{{langObj.gabay_email}}">
+			</div> -->
+			<div ng-class="langObj.lang === 'he' ? 'custom-form-group-he' : 'custom-form-group-en'">
+				<label class="mobile-hide">{{langObj.phone_number}}</label>
+				<input type="text" class="form-control custom-input mobile-full" ng-model="newSeller.phone_number" placeholder="{{langObj.phone_number}}">
+			</div>
+			<!-- <div ng-class="langObj.lang === 'he' ? 'custom-form-group-he' : 'custom-form-group-en'">
+				<label class="mobile-hide">{{langObj.contact_email}}</label>
+				<input type="text" class="form-control custom-input mobile-full" ng-model="newSeller.contact_email" placeholder="{{langObj.contact_email}}">
+			</div> -->
+			<!-- <div ng-class="langObj.lang === 'he' ? 'custom-form-group-he' : 'custom-form-group-en'">
+				<label class="mobile-hide">{{langObj.contact_phone}}</label>
+				<input type="number" class="form-control custom-input mobile-full" ng-model="newSeller.contact_phone" placeholder="{{langObj.contact_phone}}">
+			</div> -->
+			<!-- <div ng-class="langObj.lang === 'he' ? 'custom-form-group-he' : 'custom-form-group-en'">
+				<label class="mobile-hide">{{langObj.description}}</label>
+				<input type="text" class="form-control custom-input mobile-full" ng-model="newSeller.description" placeholder="{{langObj.description}}">
+			</div> -->
+			<!-- <div ng-class="langObj.lang === 'he' ? 'custom-form-group-he' : 'custom-form-group-en'">
+				<label class="mobile-hide">{{langObj.site_url}}</label>
+				<input type="text" class="form-control custom-input mobile-full" ng-model="newSeller.site_url" placeholder="{{langObj.site_url}}">
+			</div> -->
+			<!-- <div ng-class="langObj.lang === 'he' ? 'custom-form-group-he' : 'custom-form-group-en'">
+				<label class="mobile-hide">{{langObj.business_type}}</label>
+				<input type="number" class="form-control custom-input mobile-full" ng-model="newSeller.business_type" placeholder="{{langObj.business_type}}">
+			</div> -->
+			<!-- <div ng-class="langObj.lang === 'he' ? 'custom-form-group-he' : 'custom-form-group-en'">
+				<label class="mobile-hide">{{langObj.inc}}</label>
+				<input type="number" class="form-control custom-input mobile-full" ng-model="newSeller.inc" placeholder="{{langObj.inc}}">
+			</div>
+			<div ng-class="langObj.lang === 'he' ? 'custom-form-group-he' : 'custom-form-group-en'">
+				<label class="mobile-hide">{{langObj.inc_code}}</label>
+				<input type="number" class="form-control custom-input mobile-full" ng-model="newSeller.inc_code" placeholder="{{langObj.inc_code}}">
+			</div> -->
+			<!-- <div ng-class="langObj.lang === 'he' ? 'custom-form-group-he' : 'custom-form-group-en'">
+				<label class="mobile-hide">{{langObj.retail_type}}</label>
+				<input type="number" class="form-control custom-input mobile-full" ng-model="newSeller.retail_type" placeholder="{{langObj.retail_type}}">
+			</div> -->
+			<!-- <div ng-class="langObj.lang === 'he' ? 'custom-form-group-he' : 'custom-form-group-en'">
+				<label class="mobile-hide">{{langObj.merchant_name}}</label>
+				<input type="text" class="form-control custom-input mobile-full" ng-model="newSeller.merchant_name" placeholder="{{langObj.merchant_name}}">
+			</div> -->
+			<div ng-class="langObj.lang === 'he' ? 'custom-form-group-he' : 'custom-form-group-en'">
+				<label class="mobile-hide">{{langObj.city}}</label>
+				<input type="text" class="form-control custom-input mobile-full" ng-model="newSeller.city" placeholder="{{langObj.city}}">
+			</div>
+			<div ng-class="langObj.lang === 'he' ? 'custom-form-group-he' : 'custom-form-group-en'">
+				<label class="mobile-hide">{{langObj.street}}</label>
+				<input type="text" class="form-control custom-input mobile-full" ng-model="newSeller.street" placeholder="{{langObj.street}}">
+			</div>
+			<div ng-class="langObj.lang === 'he' ? 'custom-form-group-he' : 'custom-form-group-en'">
+				<label class="mobile-hide">{{langObj.street_number}}</label>
+				<input type="number" class="form-control custom-input mobile-full" ng-model="newSeller.street_number" placeholder="{{langObj.street_number}}">
+			</div>
+			<div ng-class="langObj.lang === 'he' ? 'custom-form-group-he' : 'custom-form-group-en'">
+				<label class="mobile-hide">{{langObj.market_fee}}</label>
+				<input type="number" class="form-control custom-input mobile-full" ng-model="newSeller.market_fee" placeholder="{{langObj.market_fee}}">
+			</div>
+			<div ng-class="langObj.lang === 'he' ? 'custom-form-group-he' : 'custom-form-group-en'">
+				<label class="mobile-hide">{{langObj.file_social_id}}</label>
+				<input type="text" class="form-control custom-input mobile-full" ng-model="newSeller.file_social_id" placeholder="{{langObj.file_social_id}}">
+			</div>
+			<div ng-class="langObj.lang === 'he' ? 'custom-form-group-he' : 'custom-form-group-en'">
+				<label class="mobile-hide">{{langObj.file_cheque}}</label>
+				<input type="text" class="form-control custom-input mobile-full" ng-model="newSeller.file_cheque" placeholder="{{langObj.file_cheque}}">
+			</div>
+			<div ng-class="langObj.lang === 'he' ? 'custom-form-group-he' : 'custom-form-group-en'">
+				<label class="mobile-hide">{{langObj.file_corporate}}</label>
+				<input type="text" class="form-control custom-input mobile-full" ng-model="newSeller.file_corporate" placeholder="{{langObj.file_corporate}}">
+			</div>
+			<!-- <div ng-class="langObj.lang === 'he' ? 'custom-form-group-he' : 'custom-form-group-en'">
+				<label class="mobile-hide">{{langObj.bank_auth}}</label>
+				<input type="text" class="form-control custom-input mobile-full" ng-model="newSeller.bank_auth" placeholder="{{langObj.bank_auth}}">
+			</div>
+			<div ng-class="langObj.lang === 'he' ? 'custom-form-group-he' : 'custom-form-group-en'">
+				<label class="mobile-hide">{{langObj.custom_details}}</label>
+				<input type="text" class="form-control custom-input mobile-full" ng-model="newSeller.custom_details" placeholder="{{langObj.custom_details}}">
+			</div> -->
+		</form>
+		
+        <div ng-class="langObj.lang === 'he' ? 'custom-form-group-he' : 'custom-form-group-en'">
+            <label class="mobile-hide">{{langObj.accountnumber}}</label>
+            <input type="text" class="form-control custom-input mobile-full" ng-model="acc.number" placeholder="{{langObj.accountnumber}}">
+            <div ng-class="langObj.lang === 'he' ? 'custom-form-group-he' : 'custom-form-group-en'">
+                <label class="mobile-hide">{{langObj.branch}}</label>
+                <input type="text" class="form-control custom-input mobile-full" ng-model="acc.branch" placeholder="{{langObj.branch}}">
+            </div>
+            <div ng-class="langObj.lang === 'he' ? 'custom-form-group-he' : 'custom-form-group-en'">
+                <label class="mobile-hide">{{langObj.bank}}</label>
+                <select class="form-control custom-input mobile-full" ng-model="acc.bank" ng-change="checkBank()">
+                    <option ng-repeat="bank in banks" value="{{bank.number}}">{{bank.name}}</option>
+                </select>
+            </div>
+            <div ng-class="langObj.lang === 'he' ? 'custom-form-group-he' : 'custom-form-group-en'">
+                <input type="text" class="form-control custom-input mobile-full" ng-model="acc.bank" ng-show="otherbank" placeholder="{{langObj.bank}}">
+            </div>
+            <div style="text-align:center">
+                <input type="checkbox" class="custom-checkbox" ng-model="newSyn.section46"> <label>{{langObj.section46}}</label>
+            </div>
+        </div>
+        <button class="btn btn-success" style="margin-top: 10px;margin-bottom: 10px; font-size: 16px;" ng-click="addSyn()"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp{{langObj.add}}</button>
+
+
+    </div>
+</div>
+<div class="cssload-spin-box" ng-show="users.view === 'spinner'"></div>

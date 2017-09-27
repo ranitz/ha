@@ -1,0 +1,84 @@
+<div class="donateNav">
+    <div class="donateTab" ng-class="{donateTabActive:donation.view === 1}">{{langObj.donerdetails}}</div>
+    <div class="donateTab" ng-class="{donateTabActive:donation.view === 2 || donation.view === 5}">{{langObj.donerccno}}</div>
+    <div class="donateTab" ng-class="{donateTabActive:donation.view === 3 || donation.view === 4}">{{langObj.transactionconfirmation}}</div>
+</div>
+<div class="donateNavMobile">
+    <div class="donateTab" ng-show="donation.view === 1">{{langObj.donerdetails}}</div>
+    <div class="donateTab" ng-show="donation.view === 2 || donation.view === 5">{{langObj.donerccno}}</div>
+    <div class="donateTab" ng-show="donation.view === 3 || donation.view === 4">{{langObj.transactionconfirmation}}</div>
+</div>
+<div class="custom-container" ng-class="{'containerDisabled':donation.view === 2}">
+    <div ng-show="donation.view === 1" style="width:410px; margin: auto">
+        <!-- <FORM class="donate-form-mobile" Action="{{formAction}}" method=POST target="iframe_url" style="width:410px; margin: auto" id="donationForm"> -->
+    <!--         <input type="hidden" name="pdesc" value="Def">
+            <input type="hidden" name="currency" value="1">
+            <input type="hidden" name="cred_type" ng-value="cred_type">
+            <input type="hidden" name="TranzilaToken" value="some=value&andother=fdds"> -->
+            <div class="form-group" ng-class="langObj.lang === 'he' ? 'custom-form-group-he' : 'custom-form-group-en'" style="margin-bottom:0px">
+				<label class="control-label mobile-hide" style="display: inline-block">{{langObj.synagogue.substring(4)}}</label>
+                <input placeholder="{{langObj.synagogue}}" typeahead-editable="false" type="text" class="form-control custom-input mobile-full" ng-model="donation.synagogue" typeahead-template-url="templates/dropdowntemplate.html" uib-typeahead="syn as syn.f_name for syn in synagogue_list.rows | filter:$viewValue" typeahead-min-length="1" required>
+            </div>
+            <div style="height:15px"><p ng-if="donation.synagogue && donation.synagogue.address !== ''">{{langObj.address}}: {{donation.synagogue.f_address}}</p></div>
+            <input type="hidden" name="synagogue_name" ng-value="donation.synagogue.f_name">
+            <input type="hidden" name="synagogue" ng-value="donation.synagogue.f_id">
+            <div class="form-group" ng-class="langObj.lang === 'he' ? 'custom-form-group-he' : 'custom-form-group-en'">
+                <label class="control-label mobile-hide" style="display: inline-block">{{langObj.sum}} (₪)</label>
+                <input placeholder="{{langObj.sum}}" type="number" pattern="[0-9]*" inputmode="numeric" min="10" class="form-control custom-input mobile-full" id='sum' name='sum' ng-model="donation.sum" ng-readonly="viewDonation === 1" ng-change="changed(donation.sum)" required>
+            </div>
+            <div class="form-group" ng-class="langObj.lang === 'he' ? 'custom-form-group-he' : 'custom-form-group-en'">
+                <label class="control-label mobile-hide" style="display: inline-block">{{langObj.for}}</label>
+                <select class="form-control custom-input mobile-full" id='for' name='for' ng-model="donationFor"  ng-change="changeDonationFor(donationFor)" ng-options="opt for opt in fors" ng-init="donationFor = fors[0]">
+                </select>
+                <input ng-show="donationFor === 'אחר'" type="text" maxlength="30" class="form-control custom-input mobile-full" ng-model="donation.for" placeholder="{{langObj.for}}" style="margin-top: 15px;">
+                <input type="hidden"  id='for' name='for' ng-value="donation.for">
+            </div>
+           <div class="form-group" ng-class="langObj.lang === 'he' ? 'custom-form-group-he' : 'custom-form-group-en'">
+                <label class="control-label mobile-hide" style="display: inline-block">{{langObj.email}}</label> 
+                <input type="email" class="form-control custom-input mobile-full" name="name" ng-model="donation.email" placeholder="{{langObj.email}}" ng-readonly="viewDonation === 1" required>
+            </div>
+            <div class="form-group" ng-class="langObj.lang === 'he' ? 'custom-form-group-he' : 'custom-form-group-en'">
+                <label class="control-label mobile-hide" style="display: inline-block">{{langObj.fullname}}</label> 
+                <input type="text" maxlength="30" class="form-control custom-input mobile-full" name="full_name" ng-model="donation.full_name" placeholder="{{langObj.fullname}}" ng-readonly="viewDonation === 1">
+            </div>
+            <div class="checkbox" ng-show="user.f_name && !user.f_token">
+                <input type="checkbox" class="checkbox" ng-model="donation.save" name="save" style="margin-left:2px"><div style="display: inline-block;width:auto;vertical-align: top;">{{langObj.saveccno}}</div>
+            </div>
+            <div class="checkbox" ng-show="user.f_token" style="margin-bottom: 0px">
+                <input type="checkbox" class="checkbox" ng-model="donation.useToken" style="margin-left:2px"><div style="display: inline-block;width:auto;vertical-align: top;">{{langObj.usesaveccno}}</div>
+            </div>
+            <input type="hidden" name="maxpay" ng-value="maxPay" ng-if="maxPay > 1"><br><br>
+            <div class="checkbox" style="margin-top:0px">
+                <input type="checkbox" class="checkbox" ng-model="licenseAgree" style="margin-left:2px;"><div style="display: inline-block;width:auto;vertical-align: top;">&nbsp;{{langObj.licenseagree}} <a href="" ng-click="openModal()">{{langObj.terms}}</a></div>
+            </div>
+        <!-- </form> -->
+        <button class="btn btn-info" ng-click="submit()" ng-show="viewDonation != 1" style="display:block; margin:auto; font-size: large;font-weight: bold; margin-top:10px" ng-disabled="!licenseAgree">{{langObj.continue}}</button>
+    </div>
+    <div ng-show="viewDonation === 1">
+        <button class="btn btn-info" ng-click="viewDonation = 0" ng-show="viewDonation === 1">{{langObj.edit}}</button>
+    </div>
+    <div ng-show="donation.view === 2">
+        <iframe class="Tiframe" name="my_iframe" ng-src="{{iframe_url}}" scrolling="yes"></iframe>
+        <button href="" class="btn btn-info custom-back-tz" ng-click="donation.view = 1">{{langObj.back}}</button>
+    </div>
+    <div ng-show="donation.view === 3">
+        <h2>{{langObj.donatesuccess}}</h2>
+        <h3>{{donation.email}}</h3>
+    </div>
+    <div ng-show="donation.view === 4">
+        <h2>{{langObj.donatefail}}</h2>
+        <a href="" ng-click="donation.view = 1">{{langObj.back}}</a>
+    </div>
+    <div ng-show="donation.view === 5">
+        <h2>{{langObj.donationwithtoken}}</h2>
+        <p>{{langObj.sum}}: {{donation.sum}} ₪</p>
+        <p>{{langObj.synagogue}}: {{donation.synagogue.f_name}}</p>
+        <button class="btn btn-success" ng-click="post_payme_token()" ng-disabled="donateClicked">{{langObj.ok}}</button>
+		<button class="btn btn-info" ng-click="donation.view = 1">{{langObj.back}}</button>
+		<!-- <iframe class="Tiframe" name="my_iframe" ng-src="{{iframe_url}}" scrolling="yes"></iframe> -->
+    </div>
+
+    <br>
+
+
+</div>

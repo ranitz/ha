@@ -1,0 +1,48 @@
+<!--<div class="custom-container" style="display: block;">
+    <h1 style='font-weight: bold;text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);'>{{langObj.title}}</h1>
+    <h2 style='font-weight: bold;text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);'>{{langObj.title}}</h2>
+</div>-->
+<div class="custom-container"    ng-show="view !== 'spinner'" style="margin-top: 10%;">
+
+    <!--        <div class="panel panel-success">
+            <div class="panel-heading">
+                <h3 class="panel-title">Panel primary</h3>
+            </div>
+            <div class="panel-body" style="width:100%;margin:auto;position: relative;">
+                <input typeahead-editable="false" type="text" ng-model="donation.synagogue" placeholder="{{langObj.choose}}" typeahead-template-url="templates/dropdowntemplate.html" uib-typeahead="syn as syn.f_name for syn in synagogue_list.rows | filter:{f_name:$viewValue}"  class="form-control" typeahead-show-hint="true" typeahead-min-length="0"  >
+                 <a class="btn btn-success" ui-sref="donate"><b style="font-size: x-large">{{langObj.donate_now}}</b></a><br><br>
+            </div>
+        </div>-->
+    <!--<h1 style='font-weight: bold;'>{{langObj.title}}</h1>-->
+    <img src="images/welcome.png" style="max-width:500px;margin-bottom:10px;width: 100%">
+    <!--<img src="images/welcome.png" style="max-width:275px;margin-bottom:10px;" class="mobileShow">-->
+    <!--    <div class="quote" style="width:100%;margin:auto;text-align: center"><br>
+            <img src="images/logo_shekel.png">
+        </div><br><br>-->
+    <!--    <h4>{{langObj.choose}}</h4>
+        <select class="form-control" ng-model="donation.synagogue" id="select" style="font-size:large; direction:rtl; width:auto; margin:auto; font-weight: bold">
+            <option ng-repeat="syn in synagogue_list.rows" value="{{syn.f_id}}">{{syn.f_name}}</option>
+        </select>-->
+    <div style="width:100%;margin:auto;position: relative;">
+        <!--<input type="text" ng-model="filterSyn" placeholder="{{langObj.synagogue}}" uib-typeahead="syn as syn.f_name for syn in synagogue_list.rows | filter:{name:$viewValue}" typeahead-template-url="dropdowntemplate.html" class="form-control" typeahead-show-hint="true" typeahead-min-length="0"  >-->
+        <!--<label>{{langObj.synagogue}}:</label>-->
+        <input typeahead-editable="false" type="text" ng-model="donation.synagogue" placeholder="{{langObj.choose}}" typeahead-template-url="templates/dropdowntemplate.html" uib-typeahead="syn as syn.f_name for syn in synagogue_list.rows | filter:$viewValue"  class="form-control placeholder-fix" typeahead-show-hint="true" typeahead-min-length="1" style="font-size: x-large;">
+        
+    </div>
+    <div style="height:5px"><p ng-if="donation.synagogue && donation.synagogue.address !== ''">{{langObj.address}}: {{donation.synagogue.f_address}}</p></div>
+    <!--<p style="font-size: large">{{synagogue_list.rows[getSynRowById(donation.synagogue)].f_address}}</p>-->
+
+    <br>
+    <a class="btn btn-success" ui-sref="donate" style="background-color: #e2b34f;border:none;"><b style="font-size: 20px"><i class="fa fa-heart" aria-hidden="true"></i> {{langObj.donate_now}}</b></a><br><br>
+    <!--<p ng-show="!user.f_name">Please <a href="#" ng-click="openLogin()">login</a> or <a href="#" ng-click="view = 'register'">Register</a> to follow your donations</p>-->
+    <a href="" ui-sref="contact({gabay:true})">{{langObj.opensynacc}}!</a>
+</div>
+<!--<div class="win synWin">
+    <div class='synWinTab' ng-repeat='syn in synagogue_list.rows'>
+        <img ng-src="{{syn.f_imgurl}}" style="height:150px;margin-right:5px" ng-click='clickSynWin($index)'>
+    </div>
+
+</div>-->
+
+<div class="cssload-spin-box" ng-show="view === 'spinner'" style="margin-top: 15%;"></div>
+

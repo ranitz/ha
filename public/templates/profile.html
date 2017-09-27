@@ -1,0 +1,201 @@
+<!--<script type="text/ng-template" id="dropdowntemplate.html">
+  <a style="float:right;">
+      <span ng-bind-html="match.label | uibTypeaheadHighlight:query" style="font-weight:bold;font-size:125%"></span>
+      <span>{{match.model.f_address}}</span>
+  </a>
+</script>-->
+<!--<nav class="navbar navbar-inverse custom-nav-inner">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+        </div>
+
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li style="margin:auto" ng-class="{active:user.view === 'donations'}" ng-click="user.view = 'donations'"><a href="">{{langObj.mydonations}}</a></li>
+                <li style="margin:auto" ng-class="{active:user.view === 'synagogues'}" ng-click="user.view = 'synagogues'"><a href="">{{langObj.mysynagogues}}</a></li>
+                <li style="margin:auto" ng-class="{active:user.view === 'edit'}" ng-click="user.view = 'edit'"><a href="">{{langObj.editmyprofile}}</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>-->
+<!--<div class="synnav">
+    <div class="list-group sidenav">
+        <button class="list-group-item" ng-class="{active:user.view === 'donations'}" ng-click="user.view = 'donations'">{{langObj.mydonations}}</button>
+        <button class="list-group-item" ng-class="{active:user.view === 'synagogues'}" ng-click="user.view = 'synagogues'">{{langObj.mysynagogues}}</button>
+        <button class="list-group-item" ng-class="{active:user.view === 'edit'}" ng-click="user.view = 'edit'">{{langObj.editmyprofile}}</button>
+    </div>
+</div>-->
+<div class="custom-container custom-overflow" style="margin-top:2%" ng-hide="profileSpinner">
+    <div ng-show="user.view === 'edit'" class="custom-edit-my-profile">
+        <h2>{{langObj.editmyprofile}}</h2><br>
+        <div class="custom-well">
+            <div ng-class="langObj.lang === 'he' ? 'custom-form-group-he' : 'custom-form-group-en'">
+                <label class="mobile-hide" for="fullname">{{langObj.fullname}}</label>
+                <input type="text" maxlength="20" class="form-control custom-input mobile-full" ng-value="user.f_full_name" ng-model="newUserName" name="fullname" placeholder="{{langObj.fullname}}">
+            </div>
+            <div ng-class="langObj.lang === 'he' ? 'custom-form-group-he' : 'custom-form-group-en'">
+                <label class="mobile-hide" for="email">{{langObj.email}}</label>
+                <input type="email" class="form-control custom-input mobile-full" ng-value="user.f_name" ng-model="newUserEmail" name="email" placeholder="{{langObj.email}}">
+            </div>
+            <div style="margin-top:5px" ng-show="user.f_pending_email">{{langObj.verimailsent}}:{{user.f_pending_email}}</div>
+
+            <div ng-class="langObj.lang === 'he' ? 'custom-form-group-he' : 'custom-form-group-en'">
+                <label class="mobile-hide" for="changepass">{{langObj.changepass}}</label>
+                <input type="password" class="form-control custom-input mobile-full" ng-model="changePass.pass" name="changepass" placeholder="{{langObj.oldpass}}">
+            </div>
+            <div ng-class="langObj.lang === 'he' ? 'custom-form-group-he' : 'custom-form-group-en'">
+                <!--<label for="changepass">{{langObj.changepass}}</label>-->
+                <input type="password" class="form-control custom-input mobile-full" ng-model="changePass.newPass" name="changepass" placeholder="{{langObj.newpass}}">
+            </div>
+            <div ng-class="langObj.lang === 'he' ? 'custom-form-group-he' : 'custom-form-group-en'">
+                <!--<label for="changepassverify">{{langObj.verifypass}}</label>-->
+                <input type="password" class="form-control custom-input mobile-full" ng-model="changePass.verify" name="changepassverify" placeholder="{{langObj.verifypass}}">
+            </div>
+            <br><button class="btn btn-success" ng-click="updateUser()" style="width:88%;font-size:18px;margin-bottom:10px" ng-disabled="inProgress"><i class="fa fa-floppy-o" aria-hidden="true"></i> {{langObj.save}}</button>
+        </div><br>
+        <div class="custom-well">
+            <div ng-class="langObj.lang === 'he' ? 'custom-form-group-he' : 'custom-form-group-en'" style="float:none; text-align: center;border-bottom: 1px solid gray;">
+                <label><i class="fa fa-credit-card" aria-hidden="true"></i> {{langObj.savedccno}} </label>
+                <div class="custom-input" style="display:inline-block;width:55%">
+                    <div ng-hide="user.f_token" style="font-size:17px">{{langObj.notoken}}</div>
+                    <span ng-show="user.f_token">
+                        <button class="btn btn-warning" style="margin-bottom:10px;font-size: 18px;" ng-click="removeToken()"><i class="fa fa-trash-o" aria-hidden="true"></i> {{langObj.remove}}</button>
+                    </span>
+                </div>
+            </div>
+            <div ng-class="langObj.lang === 'he' ? 'custom-form-group-he' : 'custom-form-group-en'" style="float:none; text-align: center">
+                <label><i class="fa fa-envelope-o" aria-hidden="true"></i> {{langObj.getmailfromlist}} </label>
+                <input type="checkbox" ng-model="user.f_accept_mail" ng-change="changeMailPerfrences()">
+            </div>
+        </div>
+        <br>
+
+        <div ng-class="langObj.lang === 'he' ? 'custom-form-group-he' : 'custom-form-group-en'" style="float:none; text-align: center">
+            <button class="btn btn-danger" ng-click="rusure = true">{{langObj.deleteaccount}}</button>
+            <div ng-show="rusure === true">
+                {{langObj.verifydelete}}<br>
+                <button class="btn btn-success" ng-click="deleteUser()">{{langObj.ok}}</button>
+                <button class="btn btn-warning" ng-click="rusure = false">{{langObj.cancel}}</button>
+            </div>
+        </div>
+
+
+    </div>
+    <div ng-show="user.view === 'synagogues'">
+        <h2>{{langObj.mysynagogues}}</h2>
+        <p ng-show="!user.f_synagogue_list || user.f_synagogue_list.length < 1">{{langObj.notfollowing}}</p>
+        <table class="table" ng-hide="!user.f_synagogue_list || user.f_synagogue_list.length < 1">
+            <thead>
+                <tr>
+                    <th>{{langObj.name}}</th>
+                    <th>{{langObj.address}}</th>
+                    <th colspan='2'>{{langObj.actions}}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="syn in synagogue_list.rows" ng-show="contains(user.f_synagogue_list, syn.f_id)">
+                    <td><a href="" ui-sref="synagogues({syn:syn.f_id})">{{syn.f_name}}</a></td>
+                    <td>{{syn.f_address}}</td>
+                    <td>
+                        <button class="btn btn-info" ng-click="makeDefault(syn.f_id)" ng-hide="syn.f_id == user.f_synagogue_list[0]"><i class="fa fa-star-o" aria-hidden="true"></i> {{langObj.makedefault}}</button>
+                        <button class="btn btn-success" ng-show="syn.f_id == user.f_synagogue_list[0]">
+                            <i class="fa fa-star" aria-hidden="true"></i> {{langObj.main}}
+                        </button>
+                    </td>
+                    <td>
+                        <button class="btn btn-danger" ng-click="unfollow(syn.f_id)"><i class="fa fa-trash-o" aria-hidden="true"></i> {{langObj.remove}}</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table> 
+
+
+
+
+
+    </div>
+    <div ng-show="user.view === 'donations'" style="width:auto">
+        <h2 style="font-weight: bold">{{langObj.donations}}</h2>
+
+        <div ng-if="!myDonations || myDonations.length === 0">
+            {{langObj.nodonations}} <br>
+            <button class="btn btn-success" ui-sref="donate" style="margin-top: 10px;">{{langObj.donate}}</button>
+        </div>
+        <div ng-if="myDonations && myDonations.length > 0">
+            <div ng-hide="filterUser"><a href=""  ng-click="filterUser = true">{{langObj.filter}}</a> | <a href="" ng-click="initUser()">{{langObj.showall}}</a></div>
+            <div id="filtersUser" ng-show="filterUser">
+                <div class="row" style="width:370px;margin:auto;direction:ltr">
+                    <div class="col-md-6"  style="margin:auto" ng-class="langObj.lang === 'he' ? 'navpicHe' : 'navpicEn'">
+                        {{langObj.fromdate}}
+                        <p class="input-group">
+                            <input type="text" class="form-control" uib-datepicker-popup="dd/MM/yyyy" ng-model="adStartDate" is-open="userpopup1.opened" ng-required="true" close-text="Close" />
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-default" ng-click="userpopup1.opened = true"><i class="glyphicon glyphicon-calendar"></i></button>
+                            </span>
+                        </p>
+                    </div>
+
+                    <div class="col-md-6" style="margin:auto">
+                        {{langObj.todate}}
+                        <p class="input-group">
+                            <input type="text" class="form-control" uib-datepicker-popup="dd/MM/yyyy" ng-model="adEndDate" is-open="userpopup2.opened" ng-required="true" close-text="Close" />
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-default" ng-click="userpopup2.opened = true"><i class="glyphicon glyphicon-calendar"></i></button>
+                            </span>
+                        </p>
+                    </div>
+                </div>
+                <br>
+                <div>
+                    <!--<input type="text" ng-model="filterSyn" placeholder="{{langObj.synagogue}}" uib-typeahead="syn as syn.f_name for syn in synagogue_list.rows | filter:{name:$viewValue}" typeahead-template-url="dropdowntemplate.html" class="form-control" typeahead-show-hint="true" typeahead-min-length="0"  >-->
+                    <label style="text-align: center;font-size: 25px;font-weight: bold">{{langObj.synagogue}}</label>
+                    <input type="text" ng-model="filterSyn" placeholder="{{langObj.leaveemptyforall}}" uib-typeahead="syn as syn.f_name for syn in synagogue_list.rows | filter:{f_name:$viewValue}" typeahead-template-url="templates/dropdowntemplate.html" class="form-control custom-input-typeahead placeholder-fix" typeahead-show-hint="true" typeahead-min-length="0"  >
+                </div>
+                <br>
+                <button class="btn btn-info" ng-click="dateFilter(adStartDate, adEndDate, filterSyn.f_id)">{{langObj.filter}}</button>
+                <br>
+                <a href="" ng-click="filterUser = false">{{langObj.back}}</a>
+            </div>
+            <br>
+
+            <table class="table" ng-hide="filterUser">
+                <thead>
+                    <tr>
+                        <th>{{langObj.synagogue}}</th>
+                        <th>{{langObj.sum}}</th>
+                        <th>{{langObj.for}}</th>
+                        <th>{{langObj.tempref}}</th>
+                        <th>{{langObj.date}}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="don in myDonations| startFrom:userDcounter | limitTo:10">
+                        <td>{{don.f_synagogue}}</td>
+                        <td>{{don.f_sum}}</td>
+                        <td>{{don.f_for}}</td>
+                        <td>{{don.f_tempref}}</td>
+                        <td>{{parseDate(don.f_date)}}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div ng-hide="filterUser">
+                <a href="" ng-hide="userDcounter === 0" ng-click="userDcounter = userDcounter - 10">{{langObj.prev}}</a>
+                {{userDcounter + 1}}-<span ng-hide="userDcounter + 10 > myDonations.length">{{userDcounter + 10}}</span><span ng-show="userDcounter + 10 > myDonations.length">{{myDonations.length}}</span>/{{myDonations.length}}
+                <a href="" ng-click="userDcounter = userDcounter + 10" ng-hide="userDcounter + 10 >= myDonations.length">{{langObj.next}}</a>
+            </div><br>
+            <div ng-hide="filterUser">
+                <button class='btn btn-info' ng-hide="excelwait === true"  ng-click="getExcel(myDonations)"><i class="fa fa-file-excel-o" aria-hidden="true"></i> {{langObj.exceltoemail}}</button>
+                <button class='btn btn-info' ng-show="excelwait === true"><i class="fa fa-refresh fa-spin fa-fw"></i> {{langObj.pleasewait}}</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="cssload-spin-box" ng-show="profileSpinner"></div>

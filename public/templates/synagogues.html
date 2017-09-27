@@ -1,0 +1,105 @@
+<!--
+<div class="synnav">
+    <div class="list-group sidenav">
+        <button ng-click="clickSyn($index)" ng-class="{active:showSyn == $index}" class="list-group-item"  >
+            {{s.f_name}}
+        </button>
+    </div>
+</div>-->
+
+
+<div class="custom-container custom-overflow" style="margin-top:2%; min-width:350px">
+
+    <div id="synagogues-top" ng-show="!synagoguesView || synagoguesView === 0">
+
+        <h2>{{langObj.synagogues}}</h2>
+        <div>
+            <i class="fa fa-lg fa-search" aria-hidden="true"></i>&nbsp;<input type="text" ng-model="searchSyns" class="form-control" style="width:80%; display: inline-block" placeholder="{{langObj.search}}">
+        </div>
+    </div>
+    <div id="synagogues-search" ng-show="synagoguesView === false" style="min-width: 350px; max-width: 500px; margin-top:25px; height:480px; overflow: auto;">
+        <div ng-repeat="s in filteredSyns = (synagogue_list.rows| filter:searchSyns | limitTo:filteredLimit)" class="synagogue-search-item" ng-click="clickSyn(s.f_id)">
+            <h3>{{s.f_name}}</h3>
+            <p>{{s.f_address}}</p>
+        </div><br>
+        <a href="" ng-click="addResults()" ng-hide="filteredLimit > filteredSyns.length">{{langObj.moreresults}}</a>
+        <div ng-hide="filteredSyns.length > 0"><br>{{langObj.nosearchresults}}</div>
+    </div>
+
+    <div ng-show="synagoguesView === true">
+        <div ng-repeat="s in synagogue_list.rows"  ng-show="showSyn === s.f_id">
+
+            <div style="margin-top:1%">
+                <p>{{langObj.synagogue}}</p>
+                <h2>{{s.f_name}}</h2>
+                <h3>{{s.f_address}}</h3>
+                <!--                <div style="width:100%;background-color: rgba(22,22,22,0.7);border-radius: 6px;display: inline-block; height:15px" >
+                                    <h3>{{langObj.news}}</h3>
+                                    <div class="scroll-up">
+                                        <div class="insidescroll">
+                                            <div ng-repeat="m in s.f_messages">
+                                                <p>{{m}}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>-->
+                <div class="news custom-ticker">
+                    <span>{{langObj.news}}</span>
+                    <ul>
+                        <li ng-repeat="m in s.f_messages">{{m}}</li>
+                    </ul>
+                </div>
+                <div>
+                    <div style="width:90%;display: inline-block;" class="custom-well">
+
+                        <p style="padding:10px; max-width: 350px;margin:auto">{{s.f_content}}</p>
+                        <p style="border-top:1px solid #57585a;padding:10px">{{langObj.contactemail}}: {{s.f_contact_mail}}</p>
+                    </div>
+                    <div class="custom-well" style="margin-bottom:5px;margin-top:10px;padding-bottom: 10px;">
+                        <div style="width:100%">
+                            <label>{{langObj.paryertimes}}</label>
+                        </div>
+                        <div style="width:100%">
+                            <label>{{langObj.weekdays}}</label>
+                        </div>
+                        <div style="display: inline-block">
+                            <label>{{langObj.morning}}</label>
+                            <input class='form-control' type="text" style="width:80px" ng-model="s.f_times[0]" readonly>
+                        </div>
+                        <div style="display: inline-block">
+                            <label>{{langObj.noon}}</label>
+                            <input class='form-control' type="text" style="width:80px" ng-model="s.f_times[1]" readonly>
+                        </div>
+                        <div style="display: inline-block">
+                            <label>{{langObj.evening}}</label>
+                            <input class='form-control' type="text" style="width:80px" ng-model="s.f_times[2]" readonly>
+                        </div><br>
+                        <div style="width:100%">
+                            <label>{{langObj.shabat}}</label>
+                        </div>
+                        <div style="display: inline-block">
+                            <label>{{langObj.morning}}</label>
+                            <input class='form-control' type="text" style="width:80px" ng-model="s.f_times[3]" readonly>
+                        </div>
+                        <div style="display: inline-block">
+                            <label>{{langObj.noon}}</label>
+                            <input class='form-control' type="text" style="width:80px" ng-model="s.f_times[4]" readonly>
+                        </div>
+                        <div style="display: inline-block">
+                            <label>{{langObj.evening}}</label>
+                            <input class='form-control' type="text" style="width:80px" ng-model="s.f_times[5]" readonly>
+                        </div>
+                        <div></div>
+                    </div>
+                    <div class="custom-image-well" style="margin:10px" ng-if="s.f_imgurl && s.f_imgurl !== ''"><img class='synimg' ng-src='/b/getImage/{{s.f_id}}'></div>
+                    <div style="width:100%;margin-top:20px;">
+                        <button class="btn btn-success" ng-click="refSyn(s.f_id)" style="font-size: 18px;"><i class="fa fa-heart-o" aria-hidden="true"></i> {{langObj.donate_now}}</button>
+                        <button class="btn btn-info" ng-click="follow(s.f_id)" ng-if="user.f_name && user.f_name !== '' && !contains(user.f_synagogue_list, s.f_id)" style=" font-size: 18px;"><i ng-show="followSpinner" class="fa fa-refresh fa-spin fa-fw"></i><i ng-hide="followSpinner"class="fa fa-eye" aria-hidden="true"></i> {{langObj.follow}}</button>
+                        <button class="btn btn-warning" ng-click="unfollow(s.f_id)" ng-if="user.f_name && user.f_name !== '' && contains(user.f_synagogue_list, s.f_id)" style=" font-size: 18px;"><i ng-show="followSpinner" class="fa fa-refresh fa-spin fa-fw"></i><i ng-hide="followSpinner" class="fa fa-eye-slash" aria-hidden="true"></i> {{langObj.unfollow}}</button>
+                    </div>
+                </div>
+            </div><br>
+            <a href="" ng-click="clickBack()">{{langObj.back}}</a>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,278 @@
+<!--<script type="text/html" id="popover.html">
+    sdfsdfds
+</script>-->
+<div style='height:auto'>
+    <!--    <div class="synnav">
+            <div class="list-group sidenav">
+                <button class="list-group-item" ng-class="{active:mySyn.view == 'main'}" ng-click="mySyn.view = 'main'">{{langObj.main}}</button>
+                <button class="list-group-item" ng-class="{active:mySyn.view == 'news'}" ng-click="mySyn.view = 'news'">{{langObj.editnews}}</button>
+                <button class="list-group-item" ng-class="{active:mySyn.view == 'donations'}" ng-click="mySyn.view = 'donations'">{{langObj.donations}}</button>
+                <button class="list-group-item" ng-class="{active:mySyn.view == 'followers'}" ng-click="mySyn.view = 'followers'">{{langObj.followers}}</button>
+                <button class="list-group-item" ng-class="{active:mySyn.view == 'update'}" ng-click="mySyn.view = 'update'">{{langObj.editsynagogue}}</button>
+                <button class="list-group-item" ng-class="{active:mySyn.view == 'managers'}" ng-click="mySyn.view = 'managers'" ng-if="user.f_id === mySyn.data.f_manager_list[0]">{{langObj.managers}}</button>
+            </div>
+        </div>-->
+    <div class="custom-container custom-overflow" ng-if="mySyn.view !== 'spinner'" style="margin-top:1%; width:40%;">
+        <h2>{{mySyn.data.f_name}}</h2>
+
+        <div id='main' ng-show="mySyn.view == 'main'">
+            <h2>{{langObj.welcome}}!</h2><br>
+            <p>{{langObj.totaldonations}}:{{mySyn.total}}</p>
+            <p>{{langObj.donationstoday}}:{{mySyn.dailyTotal}}</p>
+            <p>{{langObj.lastdonation}}:{{mySyn.donations[mySyn.donations.length - 1].f_name}}, {{mySyn.donations[mySyn.donations.length - 1].f_sum}}, {{parseDate(mySyn.donations[mySyn.donations.length - 1].f_date)}}</p>
+        </div>
+        <div id='updateSynagogue' ng-show="mySyn.view == 'update'">
+            <div ng-if="user.f_id === mySyn.data.f_manager_list[0]">
+                <button  class="btn btn-info" ng-click="mySyn.view = 'managers'" style='font-size:18px'><i class="fa fa-lock" aria-hidden="true"></i> {{langObj.editmanagers}}</button>
+            </div>
+            <div ng-class="langObj.lang === 'he' ? 'custom-form-group-he' : 'custom-form-group-en'">
+                <label class="mobile-hide">{{langObj.address}}</label>
+                <input type="text" maxlength="50" ng-model="mySyn.data.f_address" placeholder="{{langObj.address}}" uib-typeahead="address for address in getLocation($viewValue)" typeahead-loading="loadingLocations" typeahead-no-results="noResults" class="form-control custom-input mobile-full" >             
+            </div>
+            <div ng-class="langObj.lang === 'he' ? 'custom-form-group-he' : 'custom-form-group-en'">
+                <label class="mobile-hide" style="position:relative;bottom: 95px;">{{langObj.about}}</label>
+                <textarea ng-model='mySyn.data.f_content' rows="5" class="form-control custom-input mobile-full" placeholder="{{langObj.about}}"></textarea>
+            </div>
+            <div class="custom-well" style='padding-bottom: 10px'>
+                <div style="width:100%">
+                    <label>{{langObj.paryertimes}}</label>
+                </div>
+                <div style="width:100%">
+                    <label>{{langObj.weekdays}}</label>
+                </div>
+                <div style="display: inline-flex">
+                    <div style="display: inline-block; margin:3px " ng-repeat="t in timesWeek">
+                        <div>
+                            <label>{{t.time}}</label>
+                            <input class="form-control" type="text" maxlength="5" style='max-width:80px' ng-model="mySyn.data.f_times[t.loc]" ng-click="t.open=true" ng-hide="t.open===true" readonly>
+                            <div ng-show="t.open">
+                                <div style="direction: ltr">
+                                    <uib-timepicker ng-model="mytimePicker" show-meridian="false"></uib-timepicker>
+                                    <button class="btn btn-info" ng-click="changeTime(t, mytimePicker)">{{langObj.choose1}}</button>
+                                    <button class="btn btn-danger" ng-click="closeTime(t)">{{langObj.close}}</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--                <div style="display: inline-block">
+                                    <label>{{langObj.noon}}</label>
+                                    <input type="text" maxlength="5" style='max-width:80px' ng-model="mySyn.data.f_times[1]"  readonly>
+                                </div>
+                                <div style="display: inline-block">
+                                    <label>{{langObj.evening}}</label>
+                                    <input type="text" maxlength="5" style='max-width:80px' ng-model="mySyn.data.f_times[2]">
+                                </div>-->
+                <div style="width:100%">
+                    <label>{{langObj.shabat}}</label>
+                </div>
+                <div style="display: inline-flex">
+                    <div style="display: inline-block; margin:3px" ng-repeat="t in timesShabat">
+                        <div>
+                            <label>{{t.time}}</label>
+                            <input class="form-control" type="text" maxlength="5" style='max-width:80px' ng-model="mySyn.data.f_times[t.loc]" ng-click="t.open = true" ng-hide="t.open===true" readonly>
+                            <div ng-show="t.open">
+                                <div style="direction: ltr">
+                                    <uib-timepicker ng-model="mytimePicker" show-meridian="false"></uib-timepicker>
+                                    <button class="btn btn-info" ng-click="changeTime(t, mytimePicker)">{{langObj.choose1}}</button>
+                                    <button class="btn btn-danger" ng-click="closeTime(t)">{{langObj.close}}</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div></div>
+            </div>
+            <!--            <div ng-class="langObj.lang === 'he' ? 'custom-form-group-he' : 'custom-form-group-en'">
+                            <label class="mobile-hide">{{langObj.imagelink}}</label>
+                            <input type='text' ng-model='mySyn.data.f_imgurl' class="form-control custom-input mobile-full" placeholder="{{langObj.imagelink}}">
+                        </div>-->
+            <br><br>
+            <div class='custom-image-well' style="margin-bottom:10px;">
+                <img class='synimg' ng-src="/b/getImage/{{mySyn.data.f_id}}?{{getDatetime()}}">
+            </div>
+			<!-- <div>
+                <form name="uploader" action="/gabay/fileupload" method="post" enctype="multipart/form-data" style="margin:auto;margin-top:5px;">
+                    <input type="file" name="file"  id="file" class="btn btn-info" style="display: inline-block">
+                    <input type="submit" value="{{langObj.upload}}" class="btn btn-success" style="display: inline-block">
+                    <div>{{langObj.maxsize}}</div>
+                </form>
+            </div> -->
+			
+			<div ng-controller = "gabayCtrl" >
+				<input type = "file" file-model="myFile" accept="image/*" style="margin:auto;margin-top:5px;display: inline-block;color: aliceblue;"/>
+				<button class="btn btn-success" style="display: inline-block" ng-click = "uploadFile()" ng-disabled="uploadSpinner">{{langObj.upload}}</button>
+				<div class="loader" style="display: inline-block;" ng-if="uploadSpinner"></div>
+				<div>{{langObj.maxsize}}</div>
+			</div>
+            <br><br>
+          <!--   <div ng-class="langObj.lang === 'he' ? 'custom-form-group-he' : 'custom-form-group-en'">
+                <label class="mobile-hide">{{langObj.bankaccount}}</label>
+                <div class="custom-input mobile-full">
+                    <input type="text" class="form-control" ng-value="mySyn.data.f_bank_account[0]" style="display: inline;width:30%" readonly placeholder="{{langObj.bankaccount}}"> -
+                    <input type="text" class="form-control" ng-value="mySyn.data.f_bank_account[1]" style="display: inline;width:30%" readonly placeholder="{{langObj.branch}}"> -
+                    <input type="text" class="form-control" ng-value="mySyn.data.f_bank_account[2]" style="display: inline;width:30%" readonly placeholder="{{langObj.bank}}">
+                </div>
+            </div> -->
+			<div ng-class="langObj.lang === 'he' ? 'custom-form-group-he' : 'custom-form-group-en'" style="display:inline-block;">
+                <!--<label class="mobile-hide">{{langObj.link_to_payme}}</label>-->
+				<p><a href="https://preprod.paymeservice.com/system/login">{{langObj.link_to_payme}}</a></p>
+                <!--<input type='text' ng-value=a href="www.google.com" class="form-control custom-input mobile-full" readonly placeholder="{{langObj.link_to_payme}}"> -->
+            </div>
+            <div ng-class="langObj.lang === 'he' ? 'custom-form-group-he' : 'custom-form-group-en'">
+                <label class="mobile-hide">{{langObj.associationname}}</label>
+                <input type='text' ng-value='mySyn.data.f_association_name' class="form-control custom-input mobile-full" readonly placeholder="{{langObj.associationname}}">
+            </div>
+            <div ng-class="langObj.lang === 'he' ? 'custom-form-group-he' : 'custom-form-group-en'">
+                <label class="mobile-hide">{{langObj.associationnumber}}</label>
+                <input type='text' ng-value='mySyn.data.f_association_id' class="form-control custom-input mobile-full" readonly placeholder="{{langObj.associationnumber}}">
+            </div>
+            <div ng-class="langObj.lang === 'he' ? 'custom-form-group-he' : 'custom-form-group-en'">
+                <label class="mobile-hide">{{langObj.email}}</label>
+                <input type='email' ng-value='mySyn.data.f_contact_mail' class="form-control custom-input mobile-full" readonly placeholder="{{langObj.contactemail}}">
+            </div>
+            <br>
+
+            <button class='btn btn-success' ng-click='updateSyn(mySyn.data)' style='font-size:18px'><i class="fa fa-floppy-o" aria-hidden="true"></i> {{langObj.save}}</button>
+        </div>
+        <div ng-show="mySyn.view == 'donations'"  style="width:auto">
+            <div ng-hide="filterGabay"><a href="" ng-click="filterGabay = true">{{langObj.datefilter}}</a> | <a href="" ng-click="gabayGetAll()">{{langObj.showall}}</a></div>
+            <div id="filtersGabay" ng-show="filterGabay" style="direction:ltr">
+                <div class="row mobile-no-min-width" style="width:370px;margin:auto;">
+                    <div class="col-md-6"  style="margin:auto" ng-class="langObj.lang === 'he' ? 'navpicHe' : 'navpicEn'">
+                        {{langObj.fromdate}}
+                        <p class="input-group">
+                            <input type="text" class="form-control" uib-datepicker-popup="dd/MM/yyyy" ng-model="adStartDate" is-open="gabaypopup1.opened" ng-required="true" close-text="Close" />
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-default" ng-click="gabaypopup1.opened = true"><i class="glyphicon glyphicon-calendar"></i></button>
+                            </span>
+                        </p>
+                    </div>
+
+                    <div class="col-md-6" style="margin:auto">
+                        {{langObj.todate}}
+                        <p class="input-group">
+                            <input type="text" class="form-control" uib-datepicker-popup="dd/MM/yyyy" ng-model="adEndDate" is-open="gabaypopup2.opened" ng-required="true" close-text="Close" />
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-default" ng-click="gabaypopup2.opened = true"><i class="glyphicon glyphicon-calendar"></i></button>
+                            </span>
+                        </p>
+                    </div>
+                </div>
+                <br>
+                <button class="btn btn-info" ng-click="dateFilter(adStartDate, adEndDate)" >{{langObj.filter}}</button>
+                <div style="margin-top:15px"><a href="" ng-click="filterGabay = false">{{langObj.back}}</a></div>
+            </div>
+            <br>
+            <div ng-hide="filterGabay">
+                <i class="fa fa-lg fa-search" aria-hidden="true" style='display:inline-block;'></i>&nbsp;&nbsp;<input class="form-control" ng-model="gabaySearchText" placeholder="{{langObj.search}}" style='display: inline-block;width: 90%'>
+            </div>
+            <br>
+            <table class="table" ng-hide="filterGabay">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>{{langObj.name}}</th>
+                        <th>{{langObj.email}}</th>
+                        <th>{{langObj.sum}}</th>
+                        <th>{{langObj.date}}</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="u in filtered = (mySyn.donations| filter:gabaySearchText) | startFrom:gabayDcounter | limitTo:10">
+                        <td>{{u.f_id}}</td>
+                        <td>{{u.f_full_name}}</td>
+                        <td>{{u.f_name}}</td>
+                        <td>{{u.f_sum}}</td>
+                        <td>{{parseDate(u.f_date)}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div ng-hide="filterGabay">
+                <a href="" ng-hide="gabayDcounter === 0" ng-click="gabayDcounter = gabayDcounter - 10">{{langObj.prev}}</a>
+                {{gabayDcounter + 1}}-<span ng-hide="gabayDcounter + 10 > filtered.length">{{gabayDcounter + 10}}</span><span ng-show="gabayDcounter + 10 > filtered.length">{{filtered.length}}</span>/{{filtered.length}}
+                <a href="" ng-click="gabayDcounter = gabayDcounter + 10" ng-hide="gabayDcounter + 10 >= filtered.length">{{langObj.next}}</a>
+            </div><br>
+            <div ng-hide="filterGabay">
+                <button class='btn btn-info' ng-hide="excelwait === true"  ng-click="getExcel(filtered)"><i class="fa fa-file-excel-o" aria-hidden="true"></i> {{langObj.exceltoemail}}</button>
+                <button class='btn btn-info' ng-show="excelwait === true"><i class="fa fa-refresh fa-spin fa-fw"></i> {{langObj.pleasewait}}</button>
+            </div>
+        </div>
+        <div id='followers' ng-show="mySyn.view == 'followers'">
+            <h2>{{langObj.followers}}</h2>
+            <h4>{{langObj.mailfollowers}}</h4>
+            <!--<p>{{}}</p>--><hr>
+            <div class="gabayMailList">
+                <div class="blockMobile followersListMobile" style="display: inline-block;float: right;margin-left:2px; height: 285px;">
+                    <div class="custom-well" style="min-width: 256px">
+                        <i class="fa fa-lg fa-search" aria-hidden="true" style='display:inline-block;margin-left: -10px;'></i>
+                        <input type="text" ng-model="searchFollowers" class="form-control custom-input" style="width:80%;margin-bottom:10px;margin-top:6px" placeholder="{{langObj.search}}"> <br>
+                        <span ng-show="!checkMailList" ng-click="listChanger(true)"><input type="checkbox" ng-model="checkMailList"><label style="vertical-align: top">&nbsp;{{langObj.checkall}}</label></span>
+                        <span ng-show="checkMailList" ng-click="listChanger(false)"><input type="checkbox" ng-model="checkMailList"><label style="vertical-align: top">&nbsp;{{langObj.uncheckall}}</label></span>
+                    </div>
+                    <div class="custom-well" style="text-align: right;overflow-y: auto;overflow-x: hidden; height:200px;min-width: 256px">
+                        <p ng-repeat="f in mySyn.followers| filter:searchFollowers">
+                            &nbsp;<input type="checkbox" ng-model="f.mailto" value="1"> <label style="width:90%;vertical-align: top">
+                                {{f.f_full_name}} ({{f.f_name}})</label></p>
+                    </div>
+                </div>
+                <div class="blockMobile" style="margin:auto;width:450px;display: inline-block;float: left">
+                    <input type="text" maxlength="10" class="form-control" placeholder="{{langObj.asksum}}" ng-model="mail.sum">
+                    <input type="text" class="form-control" placeholder="{{langObj.subject}}" ng-model="mail.subject">
+                    <textarea class="form-control" ng-model="mail.content" rows="10"></textarea>
+                </div>
+            </div>
+            <div style='width:100%; display:inline-block; margin-top: 10px;'>
+                <button class="btn btn-info" ng-click="mailList()" style="margin-top:10px;display: block;margin:auto;font-weight: bold" ng-disabled="mailListSpinner"><i  ng-show="mailListSpinner" class="fa fa-refresh fa-spin fa-fw"></i><i ng-hide="mailListSpinner" class="fa fa-envelope-o" aria-hidden="true"></i> {{langObj.send}}</button>
+            </div>
+        </div>
+        <div id='news' ng-show="mySyn.view == 'news'" style="min-width: 350px;">
+            <div>
+                <input type="text" maxlength="80" style="width:50%; display: inline-block" class="form-control" placeholder="{{langObj.message}}" ng-model="mySyn.newMessage">
+                <button class="btn btn-info" style="display: inline-block" ng-click="addMessage(mySyn.data.f_id, mySyn.newMessage)" ng-disable="messageSpinner"><i class="fa fa-refresh fa-spin fa-fw" ng-show="messageSpinner"></i><i class="fa fa-plus" aria-hidden="true" ng-hide="messageSpinner"></i>&nbsp;{{langObj.add}}</button><br>
+            </div>
+            <br>
+            <table class="table">
+                <tbody>
+                    <tr ng-repeat="m in mySyn.data.f_messages">
+                        <td>{{m}}</td>
+                        <td><button class="btn btn-danger" ng-click="removeMessage(mySyn.data.f_id, m, $index)"><i ng-hide="messageRemoveSpinner[$index]" class="fa fa-trash" aria-hidden="true"></i><i ng-show="messageRemoveSpinner[$index]" class="fa fa-refresh fa-spin fa-fw" ng-show="messageSpinner"></i>&nbsp;{{langObj.remove}}</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div id='managers' ng-show="mySyn.view == 'managers'" ng-if="user.f_id === mySyn.data.f_manager_list[0]">
+            <div ng-show="mySyn.managers.length === 1">{{langObj.noothermanagers}}<br></div>
+            <div ng-hide="mySyn.managers.length === 1">
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>{{langObj.name}}</th>
+                            <th>{{langObj.email}}</th>
+                            <th>{{langObj.actions}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="man in mySyn.managers" ng-hide="man.f_id === user.f_id">
+                            <td>{{man.f_full_name}}</td>
+                            <td>{{man.f_name}}</td>
+                            <td>
+                                <button class="btn btn-info" ng-click="updateManager(man.f_name, mySyn.data.f_id, true)"><i class="fa fa-star-o" aria-hidden="true"></i> {{langObj.makemain}}</button>
+                                <button class="btn btn-danger" ng-click="removeManager(mySyn.data.f_id, man.f_id)"><i class="fa fa-trash" aria-hidden="true"></i> {{langObj.remove}}</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table> 
+            </div>
+            <div>
+                <input type="text" ng-model="mySyn.data.newManager" uib-typeahead="u.f_name for u in users.rows | filter:$viewValue | limitTo:8" class="form-control" style="width:150px;margin:auto;display: inline-block">
+                <button style="inline-block" class="btn btn-success" ng-click="updateManager(mySyn.data.newManager, mySyn.data.f_id, false)"><i class="fa fa-plus" aria-hidden="true"></i> {{langObj.add}}</button>
+            </div>
+            <a href="" ng-click="mySyn.view = 'update'">{{langObj.back}}</a>
+        </div>
+
+    </div>
+</div>
+<div class="cssload-spin-box" ng-show="mySyn.view === 'spinner'"></div>

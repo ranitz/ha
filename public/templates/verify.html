@@ -1,0 +1,9 @@
+<div class="custom-container" style="margin-top:1%; font-size:30px">
+<p ng-hide="string === true ">{{langObj.vermailsent}}</p>
+
+<div ng-show="string === true">
+    <a href="" ng-click="activate()" ng-hide="actMod === 'working'">{{langObj.clicktoactivate}}</a>
+    <p ng-show="actMod === 'working'">{{langObj.pleasewait}}</p>
+
+</div>
+</div>

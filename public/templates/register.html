@@ -1,0 +1,43 @@
+<div class="custom-container" style="margin-top: 1%;width:auto;" ng-show="reg.view !== 'spinner'">
+    <h2 ng-bind="langObj.registeration"></h2>
+    <button ng-click="loginFB()" class="btn btn-default" style="background-color: #3d57a3; border-color: #3d57a3; color:white;margin-bottom: 5px; margin-top: 10px; font-weight:bold"><i class="fa fa-facebook-official" aria-hidden="true"></i>&nbsp;{{langObj.loginwithfb}}</button>
+    <h3>{{langObj.registerhead}}</h3>
+    <form style="margin: auto;" ng-submit="regSubmit()">
+        <div ng-class="langObj.lang === 'he' ? 'custom-form-group-he' : 'custom-form-group-en'">
+            <label class="mobile-hide">{{langObj.email}}</label>
+            <input type="email" class="form-control custom-input mobile-full" ng-model="reg.email" placeholder="{{langObj.email}}">
+        </div>
+        <div ng-class="langObj.lang === 'he' ? 'custom-form-group-he' : 'custom-form-group-en'">
+            <label class="mobile-hide">{{langObj.first_name}}</label>
+            <input type="text" class="form-control custom-input mobile-full" ng-model="reg.first_name" placeholder="{{langObj.first_name}}">
+        </div>
+		<div ng-class="langObj.lang === 'he' ? 'custom-form-group-he' : 'custom-form-group-en'">
+            <label class="mobile-hide">{{langObj.last_name}}</label>
+            <input type="text" class="form-control custom-input mobile-full" ng-model="reg.last_name" placeholder="{{langObj.last_name}}">
+        </div>
+        <div ng-class="langObj.lang === 'he' ? 'custom-form-group-he' : 'custom-form-group-en'">
+            <label class="mobile-hide">{{langObj.password}}</label>
+            <input type="password" class="form-control custom-input mobile-full" ng-model="reg.password" placeholder="{{langObj.password}}">
+        </div>
+        <div ng-class="langObj.lang === 'he' ? 'custom-form-group-he' : 'custom-form-group-en'">
+            <label class="mobile-hide">{{langObj.verifypass}}</label>
+            <input type="password" class="form-control custom-input mobile-full" ng-model="reg.passwordVerify" placeholder="{{langObj.verifypass}}">
+        </div><br>
+        <div
+                vc-recaptcha
+                theme="'dark'"
+                key="model.key"
+                on-create="setWidgetId(widgetId)"
+                on-success="setResponse(response)"
+                on-expire="cbExpiration()"
+                style="display: inline-block;margin: auto;"></div>
+        <br>
+        <div>
+            <button class="btn btn-success" type="submit" style="font-size: 16px; margin-top: 5px;" ng-disabled="!gotArecap"><i class="fa fa-user-plus" aria-hidden="true"></i>&nbsp;{{langObj.send}}</button>
+            <!--        <a href='' ng-click="loginFB()" style="display: inline-block">
+                        <img ng-src="images/fb_login.png">        
+                    </a>-->
+        </div>
+    </form>
+</div>
+<div class="cssload-spin-box" ng-show="reg.view === 'spinner'"></div>
