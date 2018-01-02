@@ -3,7 +3,7 @@ module.exports = {
         //getting env vars
         var cfg = {
             port: '5432',//process.env.OPENSHIFT_NODEJS_PORT || 8085,
-            ip: '10.128.71.54'//process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1'
+            ip: '172.30.173.189'//process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1'
         };
         //getting 
         //if (cfg.ip === "127.0.0.1") {
