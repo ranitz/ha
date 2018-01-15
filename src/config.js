@@ -11,7 +11,7 @@ module.exports = {
         //} else {
             //cfg.db_url = 'postgresql://admintgqlmic:byFzDLkEpdSf@' + process.env.OPENSHIFT_POSTGRESQL_DB_HOST + ':' + process.env.OPENSHIFT_POSTGRESQL_DB_PORT + '/has';
         //}
-		 cfg.db_url = 'postgresql://admintgqlmic:byFzDLkEpdSf@' + '10.128.71.54' + ':' + '5432' + '/has';
+		 cfg.db_url = 'postgresql://admintgqlmic:byFzDLkEpdSf@' + '10.131.11.85' + ':' + '5432' + '/has';
 
         function terminator(sig) {
             if (typeof sig === "string") {
