@@ -2,8 +2,8 @@ module.exports = {
     setup: function () {
         //getting env vars
         var cfg = {
-            port: '5432',//process.env.OPENSHIFT_NODEJS_PORT || 8085,
-            ip: '172.30.173.189'//process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1'
+            port: '8080',//process.env.OPENSHIFT_NODEJS_PORT || 8085,
+            ip: '10.131.161.183'//process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1'
         };
         //getting 
         //if (cfg.ip === "127.0.0.1") {
@@ -11,7 +11,7 @@ module.exports = {
         //} else {
             //cfg.db_url = 'postgresql://admintgqlmic:byFzDLkEpdSf@' + process.env.OPENSHIFT_POSTGRESQL_DB_HOST + ':' + process.env.OPENSHIFT_POSTGRESQL_DB_PORT + '/has';
         //}
-		 cfg.db_url = 'postgresql://admintgqlmic:byFzDLkEpdSf@' + '10.131.11.85' + ':' + '5432' + '/has';
+		 cfg.db_url = 'postgresql://admintgqlmic:byFzDLkEpdSf@' + '10.129.16.235' + ':' + '5432' + '/hasDB';
 
         function terminator(sig) {
             if (typeof sig === "string") {
